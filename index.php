@@ -10,6 +10,7 @@ if (!isset($_SESSION['idUser'])) {
 	$infoPostitPerso = SelectPostitPersonnel($idUtilisateur);
 }
 
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
