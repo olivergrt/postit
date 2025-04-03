@@ -8,6 +8,7 @@ if (!isset($_SESSION['idUser'])) {
 }else{
 	$idUtilisateur = $_SESSION['idUser']; 
 	$infoPostitPerso = SelectPostitPersonnel($idUtilisateur);
+    $infoPostitPartage = SelectPostitPartage($idUtilisateur); 
 }
 
 
@@ -17,6 +18,8 @@ if (!isset($_SESSION['idUser'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
     <title>Accueil</title>
 </head>
 <body>
@@ -24,56 +27,71 @@ if (!isset($_SESSION['idUser'])) {
     <div class="navbar">
         <a href="index.php" class="tab-link" id="AfficheMesPostit">Mes post-it</a>
         <a href="index.php?partage=<?= $_SESSION['idUser'] ?>" class="tab-link" id="AfficheMesPartages">Partagé</a>
-        <a href="deconnexion.php" class="tab-link" id="tab-partage">Deconnexion</a>
+        <a href="deconnexion.php" class="tab-link" id="tab-partage">Déconnexion</a>
     </div>
 
     <div id="content">
-
-        <!-- Affichage des données pour "Mes Post-its" -->
-        <h2>Mes post-it</h2>
-        <a style="margin-bottom: 50px;" href="creation_edition/create_postit.html" class="btn-create">Créer un post-it</a><br>
-
-        <?php foreach ($infoPostitPerso as $postit) { ?>
-
-        <div class="postit-container">
-            <div class="postit-info">
-                <p><strong><?= htmlspecialchars($postit['titre']) ?></strong></p>
-                <p>Créé le : <?= date('d/m/Y', strtotime($postit['date_creation'])) ?></p>
-                <a href="edit_postit.php?id=<?= $postit['id_post_it'] ?>" class="join-button">Éditer</a>
-                <a href="delete_postit.php?id=<?= $postit['id_post_it'] ?>" class="join-button delete-button">Supprimer</a>
-            </div>
-        </div>
-        <br>
-    <?php } ?>
-</div>
+        <?php if (!isset($_GET['partage'])) { ?> <!-- Affiche uniquement  -->
 
 
+            <!-- Affichage des données pour "Mes Post-its" -->
+            <h2>Mes post-it</h2>
+            <a style="margin-bottom: 50px;" href="creation_edition/create_postit.php" class="btn-create">Créer un post-it</a><br>
+
+            <?php foreach ($infoPostitPerso as $postit) { ?>
+                <div class="postit-container">
+                    <div class="postit-info" onclick="redirectToDetails(<?= $postit['id_post_it'] ?>)">
+                        <p><strong><?= htmlspecialchars($postit['titre']) ?></strong></p>
+                        <p class="dates">Créé le : <?= date('d/m/Y', strtotime($postit['date_creation'])) ?></p>
+                       <!--  <a href="edit_postit.php?id=<?= $postit['id_post_it'] ?>" class="join-button"> <i class="fas fa-edit"></i></a>
+                        <a href="delete_postit.php?id=<?= $postit['id_post_it'] ?>" class="join-button delete-button"><i class="fas fa-trash-alt"></i></a> -->
+                    </div>
+                </div>
+                <br>
+            <?php } ?>
+        <?php } else { ?>
+
+
+            <!-- Affichage des données pour "Post-it partagés" -->
+            <h2>Post-it partagés</h2><br>
+
+            <?php foreach ($infoPostitPartage as $postit) { ?>
+                <div class="postit-container">
+                    <div class="postit-info">
+                        <p><strong><?= htmlspecialchars($postit['titre']) ?></strong></p>
+                        <p class="dates">Créé le : <?= date('d/m/Y', strtotime($postit['date_creation'])) ?></p>
+                    </div>
+                </div>
+                <br>
+            <?php } ?>
+        <?php } ?>
+    </div>
 
     <script>
-
-        /*Permet le switch entre les onglets "Mes postits" et "Partages" */
-        // Récupère l'URL de le page actuelle
+        // Permet de mettre en evidence les onglets "Mes post-its" ou  "Partagés" en fonction de la selection 
         const urlParams = new URLSearchParams(window.location.search);
         const partage = urlParams.get("partage");
 
-        // Recupere les éléments contenu dans les balises div pour : content, tabPostit, tab 
-        const content = document.getElementById("content");
-        const tabPostIt = document.getElementById("AfficheMesPostit");
-        const tabPartage = document.getElementById("AfficheMesPartages");
+        const AffichageMesPostit = document.getElementById("AfficheMesPostit");
+        const AffichagePartage = document.getElementById("AfficheMesPartages");
 
-        // Met à jour le contenu en fonction de l'URL donc soit "Mes Post-it" soit "Partagé"
         if (partage) {
-            content.innerHTML = "<h2>Post-it partagés</h2>";
-            tabPartage.classList.add("active");
-            tabPostIt.classList.remove("active");
+            AffichagePartage.classList.add("active");
+            AffichageMesPostit.classList.remove("active");
         } else {
-            tabPostIt.classList.add("active");
-            tabPartage.classList.remove("active");
+            AffichageMesPostit.classList.add("active");
+            AffichagePartage.classList.remove("active");
         }
+        /*Afficher les detail du postit */
+        function redirectToDetails(postitId) {
+        window.location.href = "visualisation_postit/visualisation_postit.php?id=" + postitId;
+    }
+
     </script>
 
 </body>
 </html>
+
 
 
     <style>
@@ -99,7 +117,14 @@ if (!isset($_SESSION['idUser'])) {
             width: 100%;
             background: white;
             padding: 10px 0;
+            margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .dates {
+        font-size: 14px; /* Réduire la taille des dates */
+        color: #555; /* Rendre le texte des dates plus discret */
+        font-weight: normal;
         }
 
         .navbar a {
@@ -157,9 +182,9 @@ if (!isset($_SESSION['idUser'])) {
         }
 
         .postit-info p {
-            margin: 5px 0;
+            margin: 10px 0;
             color: #333;
-            font-weight: bold;
+          /*  font-weight: bold;*/
         }
 
         .join-button {
