@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once('../connectDB.php');
+require_once("../functions.php");
 
 // Vérification de l'authentification
 if (!isset($_SESSION['idUser'])) {
@@ -9,17 +10,17 @@ if (!isset($_SESSION['idUser'])) {
 }
 
 $idPostit = null;
-if (isset($_GET['id'])) {
+if (isset($_GET['id'])) { // si un id de postit est present dans l'url, donc il sagit potentiellement d'une modif 
+    
     $idPostit = intval($_GET['id']);
+    $SelectInfoPostit = SelectInfoPostit($idPostit,$_SESSION['idUser']); 
 
-    $ReqVerifInfoPostit = $bdd->prepare("SELECT * FROM post_it WHERE id_post_it = ? AND id_proprietaire = ?");
-    $ReqVerifInfoPostit->execute([$idPostit, $_SESSION['idUser']]);
-    $VerifInfoPostit = $ReqVerifInfoPostit->fetch(PDO::FETCH_ASSOC);
-
-    if (!$VerifInfoPostit) {
+    if (!$SelectInfoPostit) { // Si le postit existe pas ou si le postit n'appartient pas à l'utilisateur connecté
         header("Location: ../index.php");
         exit();
     }
+
+    $userPostitPartage = SelectUserPostitPartage($idPostit); // recuperation des user avec qui le postit est partagé
 }
 
 if (isset($_POST['save'])) {
@@ -33,14 +34,17 @@ if (isset($_POST['save'])) {
                 $date_modification = date('Y-m-d H:i:s');
 
                 if ($idPostit) {
-                    $updatePostit = $bdd->prepare('UPDATE post_it SET titre = ?, contenu = ?, date_modification = ? WHERE id_post_it = ? AND id_proprietaire = ?');
-                    $updatePostit->execute([$titre, $contenu, $date_modification, $idPostit, $id_proprio]);
+
+                    updatePostit($titre, $contenu, $date_modification, $idPostit, $id_proprio);      
+                    // var_dump($date_modification);     // exit(); 
                 } else {
                     $date_creation = date('Y-m-d H:i:s');
                     $insertPostit = $bdd->prepare('INSERT INTO post_it (id_proprietaire, titre, contenu, date_creation, date_modification) VALUES (?, ?, ?, ?, ?)');
                     $insertPostit->execute([$id_proprio, $titre, $contenu, $date_creation, $date_modification]);
                     $idPostit = $bdd->lastInsertId();
                 }
+
+                /*A RELIRE LA PARTIE CI DESSOUS */
 
                 // Gestion des utilisateurs partagés
                 if (!empty($_POST['selected_users'])) {
@@ -107,23 +111,34 @@ if (isset($_POST['save'])) {
                     <div class="form-group">
                         <label>Titre :</label>
                         <input class="form-control" type="text" placeholder="Max 30 caractères" name="title"
-                               value="<?= $idPostit ? htmlspecialchars($VerifInfoPostit['titre']) : '' ?>"
+                               value="<?= $idPostit ? htmlspecialchars($SelectInfoPostit['titre']) : '' ?>"
                                autocomplete="off" required>
                     </div>
                     <br>
                     <div class="form-group">
                         <label>Contenu :</label>
                         <textarea class="form-control" name="content" rows="4" maxlength="200"
-                                  placeholder="Max 200 caractères" required><?= $idPostit ? htmlspecialchars($VerifInfoPostit['contenu']) : '' ?></textarea>
+                                  placeholder="Max 200 caractères" required><?= $idPostit ? htmlspecialchars($SelectInfoPostit['contenu']) : '' ?></textarea>
                     </div>
                     <br>
 
                     <h3>Partager</h3>
                     <input type="text" id="search" class="form-control" placeholder="Rechercher un utilisateur...">
-
                     <div class="selected-users mt-3">
-                        <h4>Partagé avec :</h4>
-                        <ul id="selected-list" class="list-group"></ul>
+                        
+                    <h5>Partagé avec :</h5>
+                        <ul id="selected-list" class="list-group"></ul> <!-- afiche les users selectionnés lors de la recherche  -->
+                        
+                    <?php     
+                    if (isset($_GET['id'])){ // Permet d'afficher le champ unbiquement si un partage existe 
+
+                        foreach ($userPostitPartage as $user) : ?> <!-- Permet de prendre en compte chaque ligne recupéré dans la requete et ajoutées dans le tableau -->
+                            <p class="dates"><?= $user['prenom'] ?> <?= $user['nom'] ?> <a href="create_postit.php?id=<?= $idPostit ?>&deleteSharedUser=<?= $user['id_utilisateur']?>">Supprimer</a></p>
+                                
+                        <?php 
+                        endforeach; 
+                        }?>
+
                     </div>
                     <input type="hidden" name="selected_users" id="selected-users-input">
                     <button class="btn btn-primary" name="save">Enregistrer</button>
@@ -147,14 +162,18 @@ if (isset($_POST['save'])) {
             padding: 8px;
             border-bottom: 1px solid #ddd;
         }
+
         .autocomplete-email {
             font-size: 12px;
             color: gray;
         }
+
+
         .autocomplete-pseudo {
             font-weight: bold;
             font-size: 14px;
         }
+
         .autocomplete-name {
             font-size: 13px;
             color: #555;

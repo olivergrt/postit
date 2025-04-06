@@ -47,23 +47,14 @@ $(document).ready(function () {
 
         selectedUsers.forEach(user => {
             $("#selected-list").append(
-                `<li class="list-group-item d-flex justify-content-between align-items-center">
-                    ${user.prenom} ${user.nom}
-                    <span class="remove-user" data-id="${user.id}">❌</span>
-                </li>`
+                `<p>${user.prenom} ${user.nom}</p>`
             );
         });
 
         $("#selected-users-input").val(selectedUsers.map(user => user.id).join(",")); // Mise à jour du champ caché
     }
 
-    /* Supprimer un utilisateur sélectionné */
-    $(document).on("click", ".remove-user", function () {
-        let userId = $(this).data("id");
-        selectedUsers = selectedUsers.filter(user => user.id !== userId);
-        updateSelectedUsers();
-    });
-
+    /*A SUPPRIMER */
     /* Empêcher l'envoi si aucun utilisateur n'est sélectionné */
     $("#share-form").on("submit", function (e) {
         if (selectedUsers.length === 0) {

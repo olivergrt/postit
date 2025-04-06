@@ -14,11 +14,12 @@ if (!isset($_GET['id'])) {
 }
 
 $idPostit = intval($_GET['id']);
-$idUtilisateur = $_SESSION['idUser'];
-$postit = SelectInfoPostit($idPostit, $idUtilisateur);
+// $idUtilisateur = $_SESSION['idUser'];
+$infoPostit = SelectInfoPostit($idPostit, $_SESSION['idUser']); 
+$userPostitPartage = SelectUserPostitPartage($idPostit); 
 
-if (!$postit) {
-    echo "Post-it introuvable ou accès non autorisé.";
+if (!$infoPostit) {
+    header("Location: ../index.php");
     exit();
 }
 ?>
@@ -35,18 +36,33 @@ if (!$postit) {
 <body>
     <div class="postit-container">
         <div class="postit-info">
-            <p class="title"><strong><?= htmlspecialchars($postit['titre']) ?></strong></p>
-            <p class="dates">Créé le : <?= date('d/m/Y', strtotime($postit['date_creation'])) ?></p>
-            <p class="dates">Dernière modification : <?= date('d/m/Y', strtotime($postit['date_modification'])) ?></p>
-            <p><?= nl2br(htmlspecialchars($postit['contenu'])) ?></p>
-            <a href="../creation_edition/create_postit.php?id=<?= $postit['id_post_it'] ?>" class="join-button"> <i class="fas fa-edit"></i></a>
-            <a href="delete_postit.php?id=<?= $postit['id_post_it'] ?>" class="join-button delete-button"><i class="fas fa-trash-alt"></i></a>
-            <br>
-            <a href="../index.php" class="join-button">Retour</a>
+            <p class="title"><strong><?= $infoPostit['titre'] ?></strong></p>
+          
+
+            <p><?= $infoPostit['contenu'] ?></p><br>
+            
+            <a href="../creation_edition/create_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="join-button"> <i class="fas fa-edit"></i></a>
+            <a href="delete_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="join-button delete-button"><i class="fas fa-trash-alt"></i></a>
+    
+            <?php     if($userPostitPartage){ ?> <!-- Permet d'afficher le champ unbiquement si un partage existe -->
+
+              <p class="dates"><b>Partagé avec :</b></p>
+            <?php 
+                foreach ($userPostitPartage as $user) : ?> <!-- Permet de prendre en compte chaque ligne recupéré dans la requete et ajoutées dans le tableau -->
+                      
+                    <p class="dates"><?= $user['prenom'] ?> <?= $user['nom'] ?></p>
+                
+            <?php endforeach; }?>
         </div>
     </div>
+        <br>
+        <p class="dates">Créé le : <?= date('d/m/Y', strtotime($infoPostit['date_creation'])) ?> par <?= $infoPostit['prenom'] ?> <?= $infoPostit['nom'] ?></p>
+        <p class="dates">Dernière modification le : <?= date('d/m/Y', strtotime($infoPostit['date_modification'])) ?></p>
+        <a href="../index.php" class="join-button">Retour</a>
+       
 </body>
 </html>
+
 
 <style>
     body {
