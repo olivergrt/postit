@@ -27,7 +27,7 @@ if (!isset($_SESSION['idUser'])) {
     <div class="navbar">
         <a href="index.php" class="tab-link" id="AfficheMesPostit">Mes post-it</a>
         <a href="index.php?partage=<?= $_SESSION['idUser'] ?>" class="tab-link" id="AfficheMesPartages">Partagé</a>
-        <a href="deconnexion.php" class="tab-link" id="tab-partage">Déconnexion</a>
+        <a href="connexion/deconnexion.php" class="tab-link" id="tab-partage">Déconnexion</a>
     </div>
 
     <div id="content">
