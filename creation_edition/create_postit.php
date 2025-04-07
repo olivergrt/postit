@@ -5,7 +5,7 @@ require_once("../functions.php");
 
 // Vérification de l'authentification
 if (!isset($_SESSION['idUser'])) {
-    header("Location: ../login.php");
+    header("Location: ../connexion/connexion.php");
     exit();
 }
 
@@ -61,7 +61,7 @@ if (isset($_POST['save'])) {
                         }
                     }
                 }
-                header("Location: ../index.php");
+                header("Location: ../visualisation_postit/visualisation_postit.php?id=$idPostit");
                 exit();
 
             } else {
@@ -73,6 +73,13 @@ if (isset($_POST['save'])) {
     } else {
         $erreur = "Tous les champs doivent être complétés.";
     }
+}
+
+
+
+if(isset($_GET['deleteSharedUser'])){
+    deletePartagePostit($idPostit,$_GET['deleteSharedUser']);
+    header("Location: create_postit.php?id=$idPostit");
 }
 ?>
 

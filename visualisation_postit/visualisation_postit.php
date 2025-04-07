@@ -4,23 +4,30 @@ require_once("../functions.php");
 include("../connectDB.php");
 
 if (!isset($_SESSION['idUser'])) {
-    header("Location: connexion/connexion.html");
+    header("Location: ../connexion/connexion.php");
     exit();
 }
 
 if (!isset($_GET['id'])) {
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit();
 }
 
 $idPostit = intval($_GET['id']);
-// $idUtilisateur = $_SESSION['idUser'];
+
 $infoPostit = SelectInfoPostit($idPostit, $_SESSION['idUser']); 
 $userPostitPartage = SelectUserPostitPartage($idPostit); 
 
-if (!$infoPostit) {
+if(isset($_GET['delete_postit'])){
+    
+    deletePostit($idPostit,$_SESSION['idUser']);
     header("Location: ../index.php");
-    exit();
+}
+
+
+if (!$infoPostit) {
+        // header("Location: ../index.php");
+        // exit();
 }
 ?>
 
@@ -36,15 +43,24 @@ if (!$infoPostit) {
 <body>
     <div class="postit-container">
         <div class="postit-info">
-            <p class="title"><strong><?= $infoPostit['titre'] ?></strong></p>
+            <p class="title"> 
+                <i class="fas fa-share-alt" title="Post-it partagé"></i> 
+                <strong><?= $infoPostit['titre'] ?></strong>
+            </p>
           
 
             <p><?= $infoPostit['contenu'] ?></p><br>
             
-            <a href="../creation_edition/create_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="join-button"> <i class="fas fa-edit"></i></a>
-            <a href="delete_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="join-button delete-button"><i class="fas fa-trash-alt"></i></a>
+            <!-- Afficher uniquement si user = proprietaire -->
+            <?php if($_SESSION['idUser'] == $infoPostit['id_proprietaire']){ ?>
+
+
+                <a href="../creation_edition/create_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="join-button"> <i class="fas fa-edit"></i></a>
+                <a href="visualisation_postit.php?id=<?= $infoPostit['id_post_it'] ?>&delete_postit=<?= $infoPostit['id_post_it'] ?>" class="join-button delete-button"><i class="fas fa-trash-alt"></i></a>
     
-            <?php     if($userPostitPartage){ ?> <!-- Permet d'afficher le champ unbiquement si un partage existe -->
+            <?php   
+            }
+              if($userPostitPartage){ ?> <!-- Permet d'afficher le champ unbiquement si un partage existe -->
 
               <p class="dates"><b>Partagé avec :</b></p>
             <?php 

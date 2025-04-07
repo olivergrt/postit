@@ -1,4 +1,10 @@
 <?php
+session_start(); 
+
+// if(!isset($_SESSION['admin'])){
+//     echo "Accès réservé aux administrateurs";   
+// }
+// else{
 $bdd = new PDO('mysql:host=127.0.0.1;dbname=app_post_it;charset=utf8', 'root', '', [
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
 ]);
@@ -11,4 +17,5 @@ $stmt = $bdd->prepare($query);
 $stmt->execute(['term' => "%$term%"]);
 
 echo json_encode($stmt->fetchAll());
-?>
+// }
+?> 
