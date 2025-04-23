@@ -25,9 +25,14 @@ if(isset($_GET['delete_postit'])){
 }
 
 
-if (!$infoPostit) {
-        // header("Location: ../index.php");
-        // exit();
+//Verification Requete SQL importante permettant de savoir si l'utilisateur à le droit de voir le postit  
+// Affiche le postit si : 
+// 1. L'utilisateur connecté sur la page Visualisation est le pripriotaire du postit passé dans l'URL 
+// 2. Si l'utilisateur connecté sur la page fait parti des utilisateur partagés 
+
+if (!$infoPostit) { 
+        header("Location: ../index.php");
+        exit();
 }
 ?>
 
@@ -42,9 +47,10 @@ if (!$infoPostit) {
 </head>
 <body>
     <div class="postit-container">
+        
         <div class="postit-info">
+            
             <p class="title"> 
-                <i class="fas fa-share-alt" title="Post-it partagé"></i> 
                 <strong><?= $infoPostit['titre'] ?></strong>
             </p>
           
@@ -62,15 +68,22 @@ if (!$infoPostit) {
             }
               if($userPostitPartage){ ?> <!-- Permet d'afficher le champ unbiquement si un partage existe -->
 
-              <p class="dates"><b>Partagé avec :</b></p>
-            <?php 
+                <p class="dates">
+                    <b>Partagé avec :</b>
+                </p>
+                
+                <?php 
                 foreach ($userPostitPartage as $user) : ?> <!-- Permet de prendre en compte chaque ligne recupéré dans la requete et ajoutées dans le tableau -->
                       
                     <p class="dates"><?= $user['prenom'] ?> <?= $user['nom'] ?></p>
                 
-            <?php endforeach; }?>
+                <?php 
+                endforeach; 
+                }?>
         </div>
+
     </div>
+
         <br>
         <p class="dates">Dernière modification le : <?= date('d/m/Y', strtotime($infoPostit['date_modification'])) ?></p>
         <p class="dates">Créé le : <?= date('d/m/Y', strtotime($infoPostit['date_creation'])) ?> par <?= $infoPostit['prenom'] ?> <?= $infoPostit['nom'] ?></p>
@@ -79,7 +92,7 @@ if (!$infoPostit) {
 </body>
 </html>
 
-
+<!-- Mettre dans un fichier CSS -->
 <style>
     body {
         display: flex;

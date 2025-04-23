@@ -1,19 +1,22 @@
 
 $(document).ready(function () {
+
     let selectedUsers = []; // Tableau pour stocker l'id des utilisateurs sélectionnés
 
     /* Autocomplétion AJAX */
     $("#search").autocomplete({
+
         source: function (request, response) {
             $.ajax({
                 url: "API_search_user.php",
                 dataType: "json",
                 data: { term: request.term },
-                success: function (data) {
+                success: function (data) 
+                {
+                    
                     response($.map(data, function (item) {
                         return {
-                            label: item.pseudo,
-                            value: item.pseudo,
+                            pseudo: item.pseudo,
                             id: item.id_utilisateur,
                             email: item.email,
                             prenom: item.prenom,
@@ -23,7 +26,6 @@ $(document).ready(function () {
                 }
             });
         },
-        minLength: 2, // Nombre de caractères min pour afficher l'autocomplétion
         select: function (event, ui) {
             if (!selectedUsers.some(user => user.id === ui.item.id)) {
                 selectedUsers.push(ui.item);
@@ -34,10 +36,12 @@ $(document).ready(function () {
         }
     }).autocomplete("instance")._renderItem = function (ul, item) {
         return $("<li>")
-            .append("<div class='autocomplete-suggestion'>" +
-                "<div><strong>" + item.label + "</strong> (" + item.prenom + " " + item.nom + ")</div>" +
-                "<div class='autocomplete-email'>" + item.email + "</div>" +
-                "</div>")
+            .append(`
+                    <div class="autocomplete-suggestion">
+                        <div><strong>${item.pseudo}</strong> (${item.prenom} ${item.nom})</div>
+                        <div class="autocomplete-email">${item.email}</div>
+                    </div>
+            `)
             .appendTo(ul);
     };
 
@@ -54,12 +58,4 @@ $(document).ready(function () {
         $("#selected-users-input").val(selectedUsers.map(user => user.id).join(",")); // Mise à jour du champ caché
     }
 
-    /*A SUPPRIMER */
-    /* Empêcher l'envoi si aucun utilisateur n'est sélectionné */
-    $("#share-form").on("submit", function (e) {
-        if (selectedUsers.length === 0) {
-            alert("Veuillez sélectionner au moins un utilisateur avant de partager.");
-            e.preventDefault();
-        }
-    });
 });

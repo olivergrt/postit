@@ -46,7 +46,9 @@ function SelectUserPostitPartage($idPostit) {
     $bdd = ConnexionDB();
     $UserPartagePostit = $bdd->prepare("SELECT id_utilisateur, prenom, nom, pseudo from post_it_partage join utilisateur on utilisateur.id_utilisateur = post_it_partage.id_user_partage where id_post_it = ?"); 
     $UserPartagePostit->execute(array($idPostit));
-    return $UserPartagePostit->fetchAll(PDO::FETCH_ASSOC); // attention le fetchall ici est important il va nous permettre de recupéré toutes les lignes trouvées (fetch recupere que la premiere)
+
+    // Le fetchall ici est important !! Il va permettre de recupéré toutes les lignes trouvées (fetch recupere que la premiere)
+    return $UserPartagePostit->fetchAll(PDO::FETCH_ASSOC); 
 }
 
 function updatePostit($titre, $contenu, $date_modification, $idPostit, $id_proprio){
@@ -66,10 +68,12 @@ function deletePostit($idPostit,$id_proprio){
     $deletePostit = $bdd->prepare('DELETE FROM `post_it` WHERE id_post_it = ? AND id_proprietaire = ?'); 
     $deletePostit->execute([$idPostit,$id_proprio]);
 }
-// function SelectInfoPostit($idPostit) {
-//   $ReqVerifInfoPostit = $bdd->prepare("SELECT * FROM post_it WHERE id_post_it = ? AND id_proprietaire = ?");
-//     $ReqVerifInfoPostit->execute([$idPostit, $_SESSION['idUser']]);
-//     $SelectInfoPostit = $ReqVerifInfoPostit->fetch(PDO::FETCH_ASSOC);
 
+function insertPostit($id_proprio,$titre,$contenu, $date_creation,$date_modification) {
+    $bdd = ConnexionDB();
+    $insertPostit = $bdd->prepare('INSERT INTO post_it (id_proprietaire, titre, contenu, date_creation, date_modification) VALUES (?, ?, ?, ?, ?)');
+    $insertPostit->execute([$id_proprio, $titre, $contenu, $date_creation, $date_modification]);
+    return $bdd->lastInsertId();
+}
 
 ?>

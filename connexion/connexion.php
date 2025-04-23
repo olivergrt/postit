@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
 <body>
     <br>
     <div class="container text-center text-danger">
-        <?php if (!empty($error)) echo "<p>$error</p>"; ?>
+        <?php if (!empty($error)) echo "<p>$error</p>"; ?> <!-- Affichage de l'erreur -->
     </div>
 
     <div class="container">

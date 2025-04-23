@@ -8,4 +8,4 @@ if(isset($_SESSION['idUser'])){
 	header("Location: connexion.php");
 }
 
-var_dump($_SESSION['idUser']) ;
+// var_dump($_SESSION['idUser']) ;
