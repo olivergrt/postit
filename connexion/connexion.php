@@ -52,12 +52,12 @@ if (isset($_POST['submit'])) {
                     <form method="POST" action="connexion.php">
                         <div class="form-group">
                             <label>Saisir votre adresse mail :</label>
-                            <input class="form-control" type="email" value="test@test.com" name="email" autocomplete="off" required>
+                            <input class="form-control" type="email" value="oliver@test.fr" name="email">
                         </div>
                         <br>
                         <div class="form-group">
                             <label>Saisir votre mot de passe :</label>
-                            <input class="form-control" type="password" value="testttt" name="password" autocomplete="off" required>
+                            <input class="form-control" type="password" value="azertyuiop" name="password">
                             <small class="form-text text-muted"><a href="">Mot de passe oublié.</a></small>
                         </div>
                         <br>

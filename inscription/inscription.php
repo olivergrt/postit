@@ -28,7 +28,7 @@
             		$insertmbr = $bdd->prepare('
     				INSERT INTO utilisateur (email, password, nom, prenom, pseudo, date_naiss) VALUES (?, ?, ?, ?, ?, ?)'); 
                 	$insertmbr->execute([$email, $password, $nom, $prenom, $pseudo, $datenaiss]);
-                	header("Location: ../connexion/connexion.html");  
+                	header("Location: ../connexion/connexion.php");  
 
 	            }
 	            else{
