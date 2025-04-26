@@ -1,12 +1,9 @@
 <?php
 session_start();
-require_once('../connectDB.php');
+require_once('../config.php');
 require_once("../functions.php");
 
-if (!isset($_SESSION['idUser'])) {
-    header("Location: ../connexion/connexion.php");
-    exit();
-}
+verifSession();
 
 $idPostit = null; 
 
@@ -99,6 +96,7 @@ if(isset($_GET['deleteSharedUser'])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <title>Créer ou Éditer un post-it</title>
@@ -177,41 +175,7 @@ if(isset($_GET['deleteSharedUser'])){
 <!-- Mettre le CSS dans un fichier à part -->
  <style>
 
-    .autocomplete-email {
-        font-size: 12px;
-        color: gray;
-    }
 
-    .autocomplete-suggestion {
-        padding: 8px;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .autocomplete-pseudo {
-        font-weight: bold;
-        font-size: 14px;
-    }
-
-    .autocomplete-name {
-        font-size: 13px;
-        color: #555;
-    }
-    .selected-users {
-        margin-bottom: 10px;
-    }
-    .selected-user {
-        display: inline-block;
-        background: #f0f0f0;
-        padding: 5px 10px;
-        margin: 5px;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-    .remove-user {
-        margin-left: 10px;
-        color: red;
-        cursor: pointer;
-    }
 </style>
 
 

@@ -1,6 +1,9 @@
 <?php
 session_start(); 
-require_once('../connectDB.php');
+require_once("../functions.php");
+verifSession();
+require_once('../config.php');
+
 /*header('Content-Type: application/json');*/
 
 //  Vérifie si c’est bien une requête AJAX qui accès à lURL si l'accès est bloqué

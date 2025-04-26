@@ -1,5 +1,8 @@
 <?php
- require_once('../connectDB.php'); 
+require_once('../config.php'); 
+require_once("../functions.php");
+
+// verifAlreadyConnected(); 
 
  if(isset($_POST['inscription'])){
 

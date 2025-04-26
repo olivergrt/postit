@@ -5,6 +5,21 @@ function ConnexionDB(){
     return $bdd; 
 }
 
+function verifSession() {
+    if (!isset($_SESSION['idUser'])) {
+        header("Location: ../connexion/connexion.php");
+        exit();
+    }
+}
+
+
+function verifAlreadyConnected() {
+    if (isset($_SESSION['idUser'])) {
+        header("Location: ../index.php");
+        exit();
+    }
+}
+
 function SelectPostitPersonnel($idUtilisateur){
     $bdd = ConnexionDB();
     $infoPostitPerso = $bdd->prepare("SELECT id_post_it,titre,date_creation,date_modification FROM post_it where id_proprietaire = ? ORDER BY date_creation desc");

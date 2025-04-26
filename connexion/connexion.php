@@ -1,6 +1,9 @@
 <?php
 session_start();
-include("../connectDB.php");
+include("../config.php");
+require_once("../functions.php");
+
+verifAlreadyConnected(); 
 
 $error = ""; // Variable pour stocker les erreurs
 
