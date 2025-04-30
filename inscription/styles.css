@@ -10,9 +10,9 @@ body {
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-h2, h3, h5 {
+h2 {
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   color: #333;
 }
 
@@ -46,17 +46,29 @@ label {
   background-color: #357ABD;
 }
 
-
-.btn-retour {
-    display: inline-block;
-    padding: 12px 20px;
-    margin: 10px 5px;
-    text-decoration: none;
-    color: white;
-    background-color: #007bff;
-    border-radius: 5px;
-    font-size: 16px;
+.btn-inscription {
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  width: 100%;
+  transition: background-color 0.3s ease;
 }
-.btn-retour:hover {
-    background-color: #0056b3;
+
+.btn-inscription:hover {
+  background-color: #357ABD;
+}
+
+.form-text a,
+.form-check-label a {
+  color: #6c757d;
+/*  text-decoration: none;*/
+  transition: color 0.3s;
+}
+
+.form-text a:hover,
+.form-check-label a:hover {
+/*  color: #4A90E2;*/
 }

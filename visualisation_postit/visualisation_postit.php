@@ -34,6 +34,24 @@ if (!$infoPostit) {
         header("Location: ../index.php");
         exit();
 }
+
+$couleur = $infoPostit['couleur']; 
+
+$backgroundColor = '#FFF176';
+
+$couleursHex = [
+    'jaune' => '#FFF176',
+    'orange' => '#FFB74D',
+    'rouge'  => '#EF5350',
+    'vert'   => '#81C784',
+    'bleu'   => '#64B5F6',
+    'rose'   => '#F48FB1',
+];
+
+if (isset($couleursHex[$couleur])) {
+    
+    $backgroundColor = $couleursHex[$couleur];
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +65,8 @@ if (!$infoPostit) {
 </head>
 </head>
 <body>
-    <div class="postit-container">
+    <body>
+        <div class="postit-container" style="background-color: <?= $backgroundColor ?>;">
         
         <div class="postit-info">
             
@@ -62,8 +81,8 @@ if (!$infoPostit) {
             <?php if($_SESSION['idUser'] == $infoPostit['id_proprietaire']){ ?>
 
 
-                <a href="../creation_edition/create_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="join-button"> <i class="fas fa-edit"></i></a>
-                <a href="visualisation_postit.php?id=<?= $infoPostit['id_post_it'] ?>&delete_postit=<?= $infoPostit['id_post_it'] ?>" class="join-button delete-button"><i class="fas fa-trash-alt"></i></a>
+                <a href="../creation_edition/create_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation"> <i class="fas fa-edit"></i></a>
+                <a href="visualisation_postit.php?id=<?= $infoPostit['id_post_it'] ?>&delete_postit=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation delete-button"><i class="fas fa-trash-alt"></i></a>
     
             <?php   
             }
@@ -86,9 +105,10 @@ if (!$infoPostit) {
     </div>
 
         <br>
-        <p class="dates">Dernière modification le : <?= date('d/m/Y', strtotime($infoPostit['date_modification'])) ?></p>
-        <p class="dates">Créé le : <?= date('d/m/Y', strtotime($infoPostit['date_creation'])) ?> par <?= $infoPostit['prenom'] ?> <?= $infoPostit['nom'] ?></p>
-        <a href="../index.php" class="join-button">Retour</a>
+        <p class="dates">Dernière modification le : <?= date('d/m/Y à H:i', strtotime($infoPostit['date_modification'])) ?></p>
+
+        <p class="dates">Créé le : <?= date('d/m/Y à H:i', strtotime($infoPostit['date_creation'])) ?> par <?= $infoPostit['prenom'] ?> <?= $infoPostit['nom'] ?></p>
+        <a href="../index.php" class="btn-page-visualisation">Retour</a>
        
 </body>
 </html>

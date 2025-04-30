@@ -4,12 +4,11 @@
         align-items: center;
         justify-content: center;
         height: 100vh;
-        background-color: #f8f9fa;
+        background-color: #FFF3D6;
         font-family: Arial, sans-serif;
     }
     .postit-container {
         width: 500px; /* Augmenter la largeur pour un plus grand carré */
-        background-color: #fffa90;
         padding: 25px; /* Ajouter plus de padding pour le confort */
         border-radius: 15px;
         box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3); /* Ombre plus marquée */
@@ -29,7 +28,7 @@
         color: #555; /* Rendre le texte des dates plus discret */
         font-weight: normal;
     }
-    .join-button {
+    .btn-page-visualisation {
         display: inline-block;
         padding: 12px 20px;
         margin: 10px 5px;
@@ -39,7 +38,7 @@
         border-radius: 5px;
         font-size: 16px;
     }
-    .join-button:hover {
+    .btn-page-visualisation:hover {
         background-color: #0056b3;
     }
     .delete-button {

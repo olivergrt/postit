@@ -22,7 +22,7 @@ function verifAlreadyConnected() {
 
 function SelectPostitPersonnel($idUtilisateur){
     $bdd = ConnexionDB();
-    $infoPostitPerso = $bdd->prepare("SELECT id_post_it,titre,date_creation,date_modification FROM post_it where id_proprietaire = ? ORDER BY date_creation desc");
+    $infoPostitPerso = $bdd->prepare("SELECT id_post_it,titre,date_creation,date_modification,couleur FROM post_it where id_proprietaire = ? ORDER BY date_creation desc");
     $infoPostitPerso->execute(array($idUtilisateur));
     
     return $infoPostitPerso->fetchAll(PDO::FETCH_ASSOC); // permet de mettre les données dans un tableau associatif pour chaque post it 
@@ -30,7 +30,7 @@ function SelectPostitPersonnel($idUtilisateur){
 
 function SelectPostitPartage($idUtilisateur){
     $bdd = ConnexionDB();
-    $infoPostitPartage = $bdd->prepare("SELECT post_it.id_post_it,titre,date_creation,date_modification,nom, prenom FROM post_it join post_it_partage on post_it.id_post_it = post_it_partage.id_post_it join utilisateur on post_it.id_proprietaire = utilisateur.id_utilisateur where id_user_partage = ? ORDER BY date_creation desc");
+    $infoPostitPartage = $bdd->prepare("SELECT post_it.id_post_it,titre,date_creation,date_modification,nom, prenom, couleur FROM post_it join post_it_partage on post_it.id_post_it = post_it_partage.id_post_it join utilisateur on post_it.id_proprietaire = utilisateur.id_utilisateur where id_user_partage = ? ORDER BY date_creation desc");
     $infoPostitPartage->execute(array($idUtilisateur));
     
     return $infoPostitPartage->fetchAll(PDO::FETCH_ASSOC); // permet de mettre les données dans un tableau associatif pour chaque post it 
@@ -43,7 +43,7 @@ function SelectPostitPartage($idUtilisateur){
 // 2. Si l'utilisateur connecté sur la page fait parti des utilisateur partagés 
 function SelectInfoPostit($idPostit, $idUtilisateur) {
     $bdd = ConnexionDB();
-    $infoPostit = $bdd->prepare("SELECT DISTINCT post_it.id_post_it, post_it.id_proprietaire,post_it.titre,post_it.contenu,post_it.date_creation,post_it.date_modification, utilisateur.nom, utilisateur.prenom FROM post_it JOIN utilisateur ON utilisateur.id_utilisateur = post_it.id_proprietaire LEFT JOIN post_it_partage ON post_it.id_post_it = post_it_partage.id_post_it WHERE post_it.id_post_it = ? AND (post_it.id_proprietaire = ? OR post_it_partage.id_user_partage = ?);
+    $infoPostit = $bdd->prepare("SELECT DISTINCT post_it.id_post_it, post_it.id_proprietaire,post_it.titre,post_it.contenu,post_it.date_creation,post_it.date_modification, utilisateur.nom, utilisateur.prenom, post_it.couleur FROM post_it JOIN utilisateur ON utilisateur.id_utilisateur = post_it.id_proprietaire LEFT JOIN post_it_partage ON post_it.id_post_it = post_it_partage.id_post_it WHERE post_it.id_post_it = ? AND (post_it.id_proprietaire = ? OR post_it_partage.id_user_partage = ?);
                                 ");
     $infoPostit->execute(array($idPostit, $idUtilisateur, $idUtilisateur));
     return $infoPostit->fetch(PDO::FETCH_ASSOC); // Renvoie directement un tableau associatif
@@ -58,10 +58,10 @@ function SelectUserPostitPartage($idPostit) {
     return $UserPartagePostit->fetchAll(PDO::FETCH_ASSOC); 
 }
 
-function updatePostit($titre, $contenu, $date_modification, $idPostit, $id_proprio){
+function updatePostit($titre, $contenu, $date_modification, $idPostit, $id_proprio, $couleur){
      $bdd = ConnexionDB();
-    $updatePostit = $bdd->prepare('UPDATE post_it SET titre = ?, contenu = ?, date_modification = ? WHERE id_post_it = ? AND id_proprietaire = ?');
-    $updatePostit->execute([$titre, $contenu, $date_modification, $idPostit, $id_proprio]);
+    $updatePostit = $bdd->prepare('UPDATE post_it SET titre = ?, contenu = ?, date_modification = ?, couleur = ? WHERE id_post_it = ? AND id_proprietaire = ?');
+    $updatePostit->execute([$titre, $contenu, $date_modification, $couleur, $idPostit, $id_proprio]);
 }
 
 function deletePartagePostit($idPostit,$idUserPartageDelete){
@@ -76,10 +76,10 @@ function deletePostit($idPostit,$id_proprio){
     $deletePostit->execute([$idPostit,$id_proprio]);
 }
 
-function insertPostit($id_proprio,$titre,$contenu, $date_creation,$date_modification) {
+function insertPostit($id_proprio,$titre,$contenu, $date_creation,$date_modification, $couleur) {
     $bdd = ConnexionDB();
-    $insertPostit = $bdd->prepare('INSERT INTO post_it (id_proprietaire, titre, contenu, date_creation, date_modification) VALUES (?, ?, ?, ?, ?)');
-    $insertPostit->execute([$id_proprio, $titre, $contenu, $date_creation, $date_modification]);
+    $insertPostit = $bdd->prepare('INSERT INTO post_it (id_proprietaire, titre, contenu, date_creation, date_modification, couleur) VALUES (?, ?, ?, ?, ?, ?)');
+    $insertPostit->execute([$id_proprio, $titre, $contenu, $date_creation, $date_modification, $couleur]);
     return $bdd->lastInsertId();
 }
 
