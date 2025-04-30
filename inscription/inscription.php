@@ -66,12 +66,12 @@ if (isset($_POST['inscription'])) {
     }
 
     if ($form_valid) {
-        $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+        $password = sha1($_POST['password']);
 
         $insertmbr = $bdd->prepare('
             INSERT INTO utilisateur (email, password, nom, prenom, pseudo, date_naiss) 
             VALUES (?, ?, ?, ?, ?, ?)');
-        $insertmbr->execute([$email, $password_hashed, $nom, $prenom, $pseudo, $datenaiss]);
+        $insertmbr->execute([$email, $password, $nom, $prenom, $pseudo, $datenaiss]);
 
         header("Location: ../connexion/connexion.php");
         exit();

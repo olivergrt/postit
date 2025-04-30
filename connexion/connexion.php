@@ -73,6 +73,11 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 </div>
-
+<br>
+<br>
+<center>
+        <img style="width: 180px;" src="../img/logo_upsaclay.png" alt="Logo">
+        <img style="width: 180px;" src="../img/logo_miage.png" alt="Logo">
+    </center>
 </body>
 </html>
