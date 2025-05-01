@@ -28,12 +28,20 @@ function SelectPostitPersonnel($idUtilisateur){
     return $infoPostitPerso->fetchAll(PDO::FETCH_ASSOC); // permet de mettre les données dans un tableau associatif pour chaque post it 
 }
 
+
 function SelectPostitPartage($idUtilisateur){
     $bdd = ConnexionDB();
     $infoPostitPartage = $bdd->prepare("SELECT post_it.id_post_it,titre,date_creation,date_modification,nom, prenom, couleur FROM post_it join post_it_partage on post_it.id_post_it = post_it_partage.id_post_it join utilisateur on post_it.id_proprietaire = utilisateur.id_utilisateur where id_user_partage = ? ORDER BY date_creation desc");
     $infoPostitPartage->execute(array($idUtilisateur));
     
     return $infoPostitPartage->fetchAll(PDO::FETCH_ASSOC); // permet de mettre les données dans un tableau associatif pour chaque post it 
+}
+
+function SelectInfoUtilisateur($idUtilisateur) {
+    $bdd = ConnexionDB();
+    $infoUtilisateur = $bdd->prepare("SELECT email, password, nom, prenom, pseudo, date_naiss  FROM utilisateur WHERE id_utilisateur = ?");
+    $infoUtilisateur->execute(array($idUtilisateur));
+    return $infoUtilisateur->fetch(PDO::FETCH_ASSOC); // Renvoie directement un tableau associatif
 }
 
 
