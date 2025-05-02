@@ -96,4 +96,21 @@ function insertPostit($id_proprio,$titre,$contenu, $date_creation,$date_modifica
     return $bdd->lastInsertId();
 }
 
+
+function supprimerCompteUtilisateur($idUtilisateur) {
+    $bdd = ConnexionDB();
+
+    $bdd->prepare("DELETE FROM post_it_partage WHERE id_post_it IN (
+        SELECT id_post_it FROM post_it WHERE id_proprietaire = ?
+
+    )")->execute([$idUtilisateur]);
+
+    $bdd->prepare("DELETE FROM post_it_partage WHERE id_user_partage = ?")->execute([$idUtilisateur]);
+
+    $bdd->prepare("DELETE FROM post_it WHERE id_proprietaire = ?")->execute([$idUtilisateur]);
+
+    $bdd->prepare("DELETE FROM utilisateur WHERE id_utilisateur = ?")->execute([$idUtilisateur]);
+    
+}
+
 ?>

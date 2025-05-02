@@ -31,6 +31,16 @@ if(isset($_POST['UpdateMonCompte'])){
     }
 }
 
+/* Suppression Compte */
+
+if (isset($_POST['deleteAccount'])) {
+    supprimerCompteUtilisateur($_SESSION['idUser']);
+    session_destroy();
+    header("Location: connexion/connexion.php");
+    exit();
+} 
+
+
 // Tableau de couleur et code hexadécimal pour le background des postits 
 $couleursHex = [
     'jaune' => '#FFF176',
@@ -166,8 +176,8 @@ $couleursHex = [
 
             <div class="text-center">
                 <a href="change_password.php" class="btn btn-outline-secondary">Modifier le mot de passe</a>
-                <form method="POST" action="supprimer_compte.php" onsubmit="return confirm('Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible.')">
-                    <button type="submit"  class="btn btn-danger mt-3">Supprimer mon compte</button>
+                <form method="POST" onsubmit="return confirm('Es-tu sûr de vouloir supprimer ton compte ?')">
+                    <button type="submit"  name="deleteAccount" class="btn btn-danger mt-3">Supprimer mon compte</button>
                 </form>
             </div>
 
