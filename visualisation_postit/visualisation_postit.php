@@ -27,8 +27,8 @@ if(isset($_GET['delete_postit'])){
 
 //Verification Requete SQL importante permettant de savoir si l'utilisateur à le droit de voir le postit  
 // Affiche le postit si : 
-// 1. L'utilisateur connecté sur la page Visualisation est le pripriotaire du postit passé dans l'URL 
-// 2. Si l'utilisateur connecté sur la page fait parti des utilisateur partagés 
+// 1. L'utilisateur connecté sur la page Visualisation est le proprietaire du postit passé dans l'URL 
+// 2. Si l'utilisateur connecté fait parti des utilisateurs partagés 
 
 if (!$infoPostit) { 
         header("Location: ../index.php");
@@ -63,10 +63,8 @@ if (isset($couleursHex[$couleur])) {
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-</head>
 <body>
-    <body>
-        <div class="postit-container" style="background-color: <?= $backgroundColor ?>;">
+    <div class="postit-container" style="background-color: <?= $backgroundColor ?>;">
         
         <div class="postit-info">
             

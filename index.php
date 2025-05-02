@@ -12,6 +12,25 @@ if (!isset($_SESSION['idUser'])) {
     $infoUtilisateur = SelectInfoUtilisateur($idUtilisateur); 
 }
 
+/* Mise a jour Mon Compte */
+
+if(isset($_POST['UpdateMonCompte'])){
+    
+    if(!empty($_POST['pseudo']) AND !empty($_POST['email'])){
+
+        if(htmlspecialchars($_POST['pseudo']) != htmlspecialchars($infoUtilisateur['pseudo']) OR htmlspecialchars($_POST['email']) != htmlspecialchars($infoUtilisateur['email'])){
+
+            $pseudo = htmlspecialchars($_POST['pseudo']); 
+            $email = htmlspecialchars($_POST['email']);  
+            updateInfoUtilisateur($pseudo,$email,$idUtilisateur); 
+            header("Location: index.php");
+        }
+        else{
+            $error = "Champs identiques aux champs précédents"; 
+        }
+    }
+}
+
 // Tableau de couleur et code hexadécimal pour le background des postits 
 $couleursHex = [
     'jaune' => '#FFF176',
@@ -113,12 +132,12 @@ $couleursHex = [
             <form method="POST">
                 <div class="mb-3">
                     <label for="prenom" class="form-label">Prénom</label>
-                    <input type="text" class="form-control" id="prenom" name="prenom" value="<?= htmlspecialchars($infoUtilisateur['prenom']) ?>">
+                    <input type="text" class="form-control" id="prenom" name="prenom" value="<?= htmlspecialchars($infoUtilisateur['prenom']) ?>" readonly>
                 </div>
 
                 <div class="mb-3">
                     <label for="nom" class="form-label">Nom</label>
-                    <input type="text" class="form-control" id="nom" name="nom" value="<?= htmlspecialchars($infoUtilisateur['nom']) ?>">
+                    <input type="text" class="form-control" id="nom" name="nom" value="<?= htmlspecialchars($infoUtilisateur['nom']) ?>" readonly>
                 </div>
 
                 <div class="mb-3">
@@ -133,10 +152,14 @@ $couleursHex = [
 
                 <div class="mb-3">
                     <label for="date_naiss" class="form-label">Date de naissance</label>
-                    <input type="date" class="form-control" id="date_naiss" name="date_naiss" value="<?= htmlspecialchars($infoUtilisateur['date_naiss']) ?>">
+                    <input type="date" class="form-control" id="date_naiss" name="date_naiss" value="<?= htmlspecialchars($infoUtilisateur['date_naiss']) ?>" readonly>
                 </div>
-
-                <button type="submit" class="btn btn-primary w-100">Enregistrer les modifications</button>
+                <?php 
+                    if(isset($error)){ ?>
+                            <!-- echo $error;  -->
+                <?php }   
+                    ?>
+                <button type="submit" name="UpdateMonCompte" class="btn btn-primary w-100">Enregistrer les modifications</button>
             </form>
 
             <hr class="my-4">
@@ -144,7 +167,7 @@ $couleursHex = [
             <div class="text-center">
                 <a href="change_password.php" class="btn btn-outline-secondary">Modifier le mot de passe</a>
                 <form method="POST" action="supprimer_compte.php" onsubmit="return confirm('Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible.')">
-                    <button type="submit" class="btn btn-danger mt-3">Supprimer mon compte</button>
+                    <button type="submit"  class="btn btn-danger mt-3">Supprimer mon compte</button>
                 </form>
             </div>
 
@@ -152,5 +175,10 @@ $couleursHex = [
     </div>
 </div>
     <?php } ?>
+
+     <center>
+        <img style="width: 130px;padding-bottom: 40px;padding-top: 40px;" src="img/logo_upsaclay.png" alt="Logo">
+        <img style="width: 90px;" src="img/logo_miage.png" alt="Logo">
+    </center>
 </body>
 </html>

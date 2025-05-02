@@ -66,6 +66,14 @@ if (isset($_POST['inscription'])) {
     }
 
     if ($form_valid) {
+    // Vérifie si le pseudo existe déja
+    $checkPseudo = $bdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE pseudo = ?");
+    $checkPseudo->execute([$pseudo]);
+    $pseudoExists = $checkPseudo->fetchColumn();
+
+    if ($pseudoExists > 0) {
+        $erreur = "Ce pseudo est déjà utilisé. Veuillez en choisir un autre.";
+    } else {
         $password = sha1($_POST['password']);
 
         $insertmbr = $bdd->prepare('
@@ -76,6 +84,8 @@ if (isset($_POST['inscription'])) {
         header("Location: ../connexion/connexion.php");
         exit();
     }
+}
+
 }
 ?>
 
@@ -161,10 +171,10 @@ if (isset($_POST['inscription'])) {
     </div>
   </div>
 </div>
-
-</body>
-</html>
-
+ <center>
+        <img style="width: 130px;padding-bottom: 40px;padding-top: 40px;" src="../img/logo_upsaclay.png" alt="Logo">
+        <img style="width: 90px;" src="../img/logo_miage.png" alt="Logo">
+    </center>
 
 </body>
 </html>

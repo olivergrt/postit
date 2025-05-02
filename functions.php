@@ -44,6 +44,11 @@ function SelectInfoUtilisateur($idUtilisateur) {
     return $infoUtilisateur->fetch(PDO::FETCH_ASSOC); // Renvoie directement un tableau associatif
 }
 
+function updateInfoUtilisateur($pseudo,$email,$idUtilisateur) {
+    $bdd = ConnexionDB();
+    $updateInfoUtilisateur = $bdd->prepare('UPDATE utilisateur SET pseudo = ?, email = ? WHERE id_utilisateur = ?');
+    $updateInfoUtilisateur->execute([$pseudo,$email,$idUtilisateur]);
+}
 
 //Verification Requete SQL importante permettant de savoir si l'utilisateur à le droit de voir le postit  
 // Affiche le postit si : 
