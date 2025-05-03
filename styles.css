@@ -1,100 +1,125 @@
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Roboto', sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
 
-    }
+}
 
 
-    body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        height: 100vh;
-        background-color: #FFF3D6;
-    }
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background-color: #FFF3D6;
+}
 
+/*Nav bar */
+.navbar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    background: white;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 15px;
+    margin: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.navbar a:hover {
+    border-bottom: 3px solid #007bff;/* effet bleu lorsqu'on passe la souris dessus */
+}
+
+
+@media screen and (max-width: 600px) {
     .navbar {
-        display: flex;
+        flex-wrap: nowrap;
         justify-content: center;
-        width: 100%;
-        background: white;
-        padding: 10px 0;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .navbar a {
-        text-decoration: none;
-        color: black;
-        padding: 10px 20px;
-        margin: 0 10px;
+        margin: 0 8px;
         font-size: 18px;
-        font-weight: bold;
-        border-bottom: 3px solid transparent;
     }
-
-    .content {
-        display: flex;
-        justify-content: space-between;
-        width: 80%;
-        padding: 20px;
-        background: white;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-
-    .postit-container {
-        width: 45%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .postit-list {
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 10px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .postit-list a {
-        text-decoration: none;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .postit-list p {
-        margin: 5px 0;
-        font-size: 14px;
-    }
-
-    .btn-create {
-      background-color: #4A90E2;
-      color: white;
-      border: none;
-      padding: 10px 25px;
-      margin-bottom: 20px;
-      border-radius: 25px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-      display: inline-block;
-      text-align: center;
-      width: 100%; /* utile si tu veux qu'il prenne toute la largeur disponible */
-    }
-    .btn-create:hover {
-      background-color: #357ABD;
-      color: white;
 }
 
 
 
-    h2 {
-        text-align: center;
-        margin-bottom: 15px;
-    }
-    @media (max-width: 768px) {
+.content {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.postit-container {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+}
+
+.postit-list {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.postit-list a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #333;
+}
+
+.postit-list p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.btn-create {
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  margin-bottom: 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  width: 100%; 
+}
+
+.btn-create:hover {
+  background-color: #357ABD;
+  color: white;
+}
+
+
+
+h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+
+@media (max-width: 768px) {
     .content {
         flex-direction: column;
         width: 90%;

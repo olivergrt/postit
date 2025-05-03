@@ -101,77 +101,75 @@ if (isset($_POST['inscription'])) {
 </head>
 <body>
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-sm-6">
-      <div class="form-container">
-        <a href="../connexion/connexion.php" class="btn btn-connexion mb-3">← Retour à la connexion</a>
-        <h2 class="text-center mb-4">Inscription</h2>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-sm-6">
+          <div class="form-container">
+            <a href="../connexion/connexion.php" class="btn btn-connexion mb-3">← Retour à la connexion</a>
+            <h2 class="text-center mb-4">Inscription</h2>
 
-        <?php if (isset($erreur)): ?>
-          <div class="alert alert-danger text-center"><?php echo $erreur; ?></div>
-        <?php endif; ?>
+            <?php if (isset($erreur)): ?>
+              <div class="alert alert-danger text-center"><?php echo $erreur; ?></div>
+            <?php endif; ?>
 
-	       <form method="POST" action="inscription.php">
-			  <div class="form-group mb-3">
-			    <label>Votre Prénom :</label>
-			    <input class="form-control <?php echo $erreur_prenom ? 'is-invalid' : ''; ?>" type="text" name="prenom" value="<?php echo $values['prenom'] ?? ''; ?>">
-			    <div class="invalid-feedback"><?php echo $erreur_prenom; ?></div>
-			  </div>
+           <form method="POST" action="inscription.php">
+    		  <div class="form-group mb-3">
+    		    <label>Votre Prénom :</label>
+    		    <input class="form-control <?php echo $erreur_prenom ? 'is-invalid' : ''; ?>" type="text" name="prenom" value="<?php echo $values['prenom'] ?? ''; ?>">
+    		    <div class="invalid-feedback"><?php echo $erreur_prenom; ?></div>
+    		  </div>
 
-			  <div class="form-group mb-3">
-			    <label>Votre Nom :</label>
-			    <input class="form-control <?php echo $erreur_nom ? 'is-invalid' : ''; ?>" type="text" name="nom" value="<?php echo $values['nom'] ?? ''; ?>">
-			    <div class="invalid-feedback"><?php echo $erreur_nom; ?></div>
-			  </div>
+    		  <div class="form-group mb-3">
+    		    <label>Votre Nom :</label>
+    		    <input class="form-control <?php echo $erreur_nom ? 'is-invalid' : ''; ?>" type="text" name="nom" value="<?php echo $values['nom'] ?? ''; ?>">
+    		    <div class="invalid-feedback"><?php echo $erreur_nom; ?></div>
+    		  </div>
 
-			  <div class="form-group mb-3">
-			    <label>Pseudo :</label>
-			    <input class="form-control <?php echo $erreur_pseudo ? 'is-invalid' : ''; ?>" type="text" name="pseudo" value="<?php echo $values['pseudo'] ?? ''; ?>">
-			    <div class="invalid-feedback"><?php echo $erreur_pseudo; ?></div>
-			  </div>
+    		  <div class="form-group mb-3">
+    		    <label>Pseudo :</label>
+    		    <input class="form-control <?php echo $erreur_pseudo ? 'is-invalid' : ''; ?>" type="text" name="pseudo" value="<?php echo $values['pseudo'] ?? ''; ?>">
+    		    <div class="invalid-feedback"><?php echo $erreur_pseudo; ?></div>
+    		  </div>
 
-			  <div class="form-group mb-3">
-			    <label>Votre adresse mail :</label>
-			    <input class="form-control <?php echo $erreur_email ? 'is-invalid' : ''; ?>" type="" name="email" value="<?php echo $values['email'] ?? ''; ?>">
-			    <div class="invalid-feedback"><?php echo $erreur_email; ?></div>
-			  </div>
+    		  <div class="form-group mb-3">
+    		    <label>Votre adresse mail :</label>
+    		    <input class="form-control <?php echo $erreur_email ? 'is-invalid' : ''; ?>" type="" name="email" value="<?php echo $values['email'] ?? ''; ?>">
+    		    <div class="invalid-feedback"><?php echo $erreur_email; ?></div>
+    		  </div>
 
-			  <div class="form-group mb-3">
-			    <label>Date de naissance :</label>
-			    <input class="form-control <?php echo $erreur_datenaiss ? 'is-invalid' : ''; ?>" type="date" name="datenaiss" value="<?php echo $values['datenaiss'] ?? ''; ?>">
-			    <div class="invalid-feedback"><?php echo $erreur_datenaiss; ?></div>
-			  </div>
+    		  <div class="form-group mb-3">
+    		    <label>Date de naissance :</label>
+    		    <input class="form-control <?php echo $erreur_datenaiss ? 'is-invalid' : ''; ?>" type="date" name="datenaiss" value="<?php echo $values['datenaiss'] ?? ''; ?>">
+    		    <div class="invalid-feedback"><?php echo $erreur_datenaiss; ?></div>
+    		  </div>
 
-			  <div class="form-group mb-3">
-			    <label>Votre mot de passe :</label>
-			    <input class="form-control <?php echo $erreur_password ? 'is-invalid' : ''; ?>" type="password" name="password">
-			    <div class="invalid-feedback"><?php echo $erreur_password; ?></div>
-			  </div>
+    		  <div class="form-group mb-3">
+    		    <label>Votre mot de passe :</label>
+    		    <input class="form-control <?php echo $erreur_password ? 'is-invalid' : ''; ?>" type="password" name="password">
+    		    <div class="invalid-feedback"><?php echo $erreur_password; ?></div>
+    		  </div>
 
-			  <div class="form-group mb-3">
-			    <label>Confirmer le mot de passe :</label>
-			    <input class="form-control <?php echo $erreur_password_confirm ? 'is-invalid' : ''; ?>" type="password" name="password_confirm">
-			    <div class="invalid-feedback"><?php echo $erreur_password_confirm; ?></div>
-			  </div>
+    		  <div class="form-group mb-3">
+    		    <label>Confirmer le mot de passe :</label>
+    		    <input class="form-control <?php echo $erreur_password_confirm ? 'is-invalid' : ''; ?>" type="password" name="password_confirm">
+    		    <div class="invalid-feedback"><?php echo $erreur_password_confirm; ?></div>
+    		  </div>
 
-			  <div class="form-check mb-4">
-			    <input class="form-check-input <?php echo $erreur_accept ? 'is-invalid' : ''; ?>" type="checkbox" name="accept" id="accept" <?php echo isset($accept) ? 'checked' : ''; ?>>
-			    <label class="form-check-label" for="accept">
-			      J'accepte les <a href="conditions.html">conditions d'utilisation</a>.
-			    </label>
-			    <div class="invalid-feedback d-block"><?php echo $erreur_accept; ?></div>
-			  </div>
+    		  <div class="form-check mb-4">
+    		    <input class="form-check-input <?php echo $erreur_accept ? 'is-invalid' : ''; ?>" type="checkbox" name="accept" id="accept" <?php echo isset($accept) ? 'checked' : ''; ?>>
+    		    <label class="form-check-label" for="accept">
+    		      J'accepte les <a href="conditions.html">conditions d'utilisation</a>.
+    		    </label>
+    		    <div class="invalid-feedback d-block"><?php echo $erreur_accept; ?></div>
+    		  </div>
 
-			  <button class="btn btn-inscription" name="inscription">Valider l'inscription</button>
-			</form>
-
-
+    		  <button class="btn btn-inscription" name="inscription">Valider l'inscription</button>
+    		</form>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
- <center>
+    <center>
         <img style="width: 130px;padding-bottom: 40px;padding-top: 40px;" src="../img/logo_upsaclay.png" alt="Logo">
         <img style="width: 90px;" src="../img/logo_miage.png" alt="Logo">
     </center>

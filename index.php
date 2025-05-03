@@ -40,8 +40,7 @@ if (isset($_POST['deleteAccount'])) {
     exit();
 } 
 
-
-// Tableau de couleur et code hexadécimal pour le background des postits 
+// Tableau de couleur pour le background des postits 
 $couleursHex = [
     'jaune' => '#FFF176',
     'orange' => '#FFB74D',
@@ -65,10 +64,11 @@ $couleursHex = [
 </head>
 <body>
     <div class="navbar">
-        <a href="index.php" class="tab-link">Accueil</a>
-        <a href="index.php?account=true" class="tab-link">Mon Compte</a>
-        <a href="connexion/deconnexion.php" class="tab-link">Déconnexion</a>
+        <a href="index.php" title="Accueil"><i class="fas fa-home"></i></a>
+        <a href="index.php?account=true" title="Mon compte"><i class="fas fa-user"></i></a>
+        <a href="connexion/deconnexion.php" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></a>
     </div>
+
 
 
     <?php if (!isset($_GET['account'])){ ?>
@@ -129,6 +129,7 @@ $couleursHex = [
         </div>
     </div>
 
+    
     <!-- Affichage page Mon Compte -->
     <?php } 
     else{ 
@@ -175,7 +176,7 @@ $couleursHex = [
             <hr class="my-4">
 
             <div class="text-center">
-                <a href="change_password.php" class="btn btn-outline-secondary">Modifier le mot de passe</a>
+                <a href="#" class="btn btn-outline-secondary">Modifier le mot de passe</a>
                 <form method="POST" onsubmit="return confirm('Es-tu sûr de vouloir supprimer ton compte ?')">
                     <button type="submit"  name="deleteAccount" class="btn btn-danger mt-3">Supprimer mon compte</button>
                 </form>

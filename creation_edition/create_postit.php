@@ -43,7 +43,6 @@ if (isset($_POST['save'])) {
     }
 
 
-// L'identifiant de l'utilisateur connecté, stocké en session
 $id_proprio = $_SESSION['idUser'];
 
     // Vérification des champs requis
@@ -133,69 +132,100 @@ if ($idPostit && isset($SelectInfoPostit['couleur'])) {
 </head>
 <body">
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-sm-8">
-      <div class="form-container">
-        <h2 class="text-center mb-4"><?= $idPostit ? "Édition d'un post-it" : "Création d'un post-it" ?></h2> <!-- Change le titre en fonction de si un ID est present dans l'url -->
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-sm-8">
+          <div class="form-container">
+            <h2 class="text-center mb-4"><?= $idPostit ? "Édition d'un post-it" : "Création d'un post-it" ?></h2> <!-- Change le titre en fonction de si un ID est present dans l'url -->
 
-        <form method="POST">
-          <div class="form-group mb-3">
-            <label>Titre :</label>
-            <input class="form-control" type="text" placeholder="Max 30 caractères" name="title"
-              value="<?= $idPostit ? htmlspecialchars($SelectInfoPostit['titre']) : '' ?>">
-          </div>
+            <form method="POST">
+              <div class="form-group mb-3">
+                <label>Titre :</label>
+                <input class="form-control" type="text" placeholder="Max 30 caractères" name="title"
+                  value="<?= $idPostit ? htmlspecialchars($SelectInfoPostit['titre']) : '' ?>">
+              </div>
 
-          <div class="form-group mb-3">
-            <label>Contenu :</label>
-            <textarea class="form-control" name="content" rows="4" placeholder="Max 200 caractères"><?= $idPostit ? htmlspecialchars($SelectInfoPostit['contenu']) : '' ?></textarea>
-          </div>
-          
-          <label for="couleur">Couleur du post-it :</label>
-            <select class="form-control" name="couleur" id="couleur">
-                <option value="jaune" <?= $color == 'jaune' ? 'selected' : '' ?>>Jaune</option>
-                <option value="orange" <?= $color == 'orange' ? 'selected' : '' ?>>Orange</option>
-                <option value="rouge" <?= $color == 'rouge' ? 'selected' : '' ?>>Rouge</option>
-                <option value="vert" <?= $color == 'vert' ? 'selected' : '' ?>>Vert</option>
-                <option value="bleu" <?= $color == 'bleu' ? 'selected' : '' ?>>Bleu</option>
-                <option value="rose" <?= $color == 'rose' ? 'selected' : '' ?>>Rose</option>
-            </select>
+              <div class="form-group mb-3">
+                <label>Contenu :</label>
+                <textarea class="form-control" name="content" rows="4" placeholder="Max 200 caractères"><?= $idPostit ? htmlspecialchars($SelectInfoPostit['contenu']) : '' ?></textarea>
+              </div>
+              
+              <label for="couleur">Couleur du post-it :</label>
+                <select class="form-control" name="couleur" id="couleur">
+                    
+                    <?php if ($color == 'jaune') { ?>
+                        <option value="jaune" selected>Jaune</option>
+                    <?php } else { ?>
+                        <option value="jaune">Jaune</option>
+                    <?php } ?>
 
-          <h3 class="mt-4">Partager</h3>
+                    <?php if ($color == 'orange') { ?>
+                        <option value="orange" selected>Orange</option>
+                    <?php } else { ?>
+                        <option value="orange">Orange</option>
+                    <?php } ?>
 
-          <input type="text" id="search" class="form-control" placeholder="Rechercher un utilisateur...">
+                    <?php if ($color == 'rouge') { ?>
+                        <option value="rouge" selected>Rouge</option>
+                    <?php } else { ?>
+                        <option value="rouge">Rouge</option>
+                    <?php } ?>
 
-          <div class="selected-users mt-3">
-            <h5>Partagé avec :</h5>
-            <ul id="selected-list" class="list-group"></ul>
+                    <?php if ($color == 'vert') { ?>
+                        <option value="vert" selected>Vert</option>
+                    <?php } else { ?>
+                        <option value="vert">Vert</option>
+                    <?php } ?>
 
-            <?php if (isset($_GET['id'])): ?>
-              <?php foreach ($userPostitPartage as $user): ?>
-                <p class="dates">
-                  <?= $user['prenom'] ?> <?= $user['nom'] ?> 
-                  <a href="create_postit.php?id=<?= $idPostit ?>&deleteSharedUser=<?= $user['id_utilisateur']?>">Supprimer</a>
-                </p>
-              <?php endforeach; ?>
+                    <?php if ($color == 'bleu') { ?>
+                        <option value="bleu" selected>Bleu</option>
+                    <?php } else { ?>
+                        <option value="bleu">Bleu</option>
+                    <?php } ?>
+
+                    <?php if ($color == 'rose') { ?>
+                        <option value="rose" selected>Rose</option>
+                    <?php } else { ?>
+                        <option value="rose">Rose</option>
+                    <?php } ?>
+                </select>
+
+              <h3 class="mt-4">Partager</h3>
+
+              <input type="text" id="search" class="form-control" placeholder="Rechercher un utilisateur...">
+
+              <div class="selected-users mt-3">
+                <h5>Partagé avec :</h5>
+                <ul id="selected-list" class="list-group"></ul>
+
+                <?php if (isset($_GET['id'])){ ?>
+                  
+                  <?php foreach ($userPostitPartage as $user){ ?>
+                    
+                    <p class="dates">
+                      <?= $user['prenom'] ?> <?= $user['nom'] ?> 
+                      <a href="create_postit.php?id=<?= $idPostit ?>&deleteSharedUser=<?= $user['id_utilisateur']?>">Supprimer</a>
+                    </p>
+                  
+                  <?php } ?>
+                
+                <?php } ?>
+              </div>
+
+              <input type="hidden" name="selected_users" id="selected-users-input">
+              <button class="btn-connexion w-100 mt-4" name="save">Enregistrer</button>
+            </form>
+
+            <?php if (isset($erreur)): ?>
+              <div class="alert alert-danger mt-3 text-center"><?= $erreur ?></div>
             <?php endif; ?>
           </div>
-
-          <input type="hidden" name="selected_users" id="selected-users-input">
-          <button class="btn-connexion w-100 mt-4" name="save">Enregistrer</button>
-        </form>
-
-        <?php if (isset($erreur)): ?>
-          <div class="alert alert-danger mt-3 text-center"><?= $erreur ?></div>
-        <?php endif; ?>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-<br>
-<center> <a href="../index.php" class="btn-retour">Retour</a></center>
-
-
-
-<script src="search_user.js"></script>
+    <br>
+    <center> <a href="../index.php" class="btn-retour">Retour</a></center>
+    <script src="search_user.js"></script>
 </body>
 </html>
 

@@ -20,6 +20,9 @@ function verifAlreadyConnected() {
     }
 }
 
+
+/* Page d'Accueil */
+
 function SelectPostitPersonnel($idUtilisateur){
     $bdd = ConnexionDB();
     $infoPostitPerso = $bdd->prepare("SELECT id_post_it,titre,date_creation,date_modification,couleur FROM post_it where id_proprietaire = ? ORDER BY date_creation desc");
@@ -44,10 +47,49 @@ function SelectInfoUtilisateur($idUtilisateur) {
     return $infoUtilisateur->fetch(PDO::FETCH_ASSOC); // Renvoie directement un tableau associatif
 }
 
-function updateInfoUtilisateur($pseudo,$email,$idUtilisateur) {
+
+
+
+/* Page Creation Post it */
+
+function insertPostit($id_proprio,$titre,$contenu, $date_creation,$date_modification, $couleur) {
     $bdd = ConnexionDB();
-    $updateInfoUtilisateur = $bdd->prepare('UPDATE utilisateur SET pseudo = ?, email = ? WHERE id_utilisateur = ?');
-    $updateInfoUtilisateur->execute([$pseudo,$email,$idUtilisateur]);
+    $insertPostit = $bdd->prepare('INSERT INTO post_it (id_proprietaire, titre, contenu, date_creation, date_modification, couleur) VALUES (?, ?, ?, ?, ?, ?)');
+    $insertPostit->execute([$id_proprio, $titre, $contenu, $date_creation, $date_modification, $couleur]);
+    return $bdd->lastInsertId();
+}
+
+
+/* Page modification postit */
+
+function updatePostit($titre, $contenu, $date_modification, $idPostit, $id_proprio, $couleur){
+     $bdd = ConnexionDB();
+    $updatePostit = $bdd->prepare('UPDATE post_it SET titre = ?, contenu = ?, date_modification = ?, couleur = ? WHERE id_post_it = ? AND id_proprietaire = ?');
+    $updatePostit->execute([$titre, $contenu, $date_modification, $couleur, $idPostit, $id_proprio]);
+}
+
+function deletePartagePostit($idPostit,$idUserPartageDelete){
+    $bdd = ConnexionDB();
+    $deletePartage = $bdd->prepare('DELETE FROM `post_it_partage` WHERE id_post_it = ? AND id_user_partage = ?'); 
+    $deletePartage->execute([$idPostit, $idUserPartageDelete]);
+}
+
+
+/* Page Visualisation Postit */
+
+function SelectUserPostitPartage($idPostit) {
+    $bdd = ConnexionDB();
+    $UserPartagePostit = $bdd->prepare("SELECT id_utilisateur, prenom, nom, pseudo from post_it_partage join utilisateur on utilisateur.id_utilisateur = post_it_partage.id_user_partage where id_post_it = ?"); 
+    $UserPartagePostit->execute(array($idPostit));
+
+    // Le fetchall ici est important !! Il va permettre de recupéré toutes les lignes trouvées (fetch recupere que la premiere)
+    return $UserPartagePostit->fetchAll(PDO::FETCH_ASSOC); 
+}
+
+function deletePostit($idPostit,$id_proprio){
+    $bdd = ConnexionDB();
+    $deletePostit = $bdd->prepare('DELETE FROM `post_it` WHERE id_post_it = ? AND id_proprietaire = ?'); 
+    $deletePostit->execute([$idPostit,$id_proprio]);
 }
 
 //Verification Requete SQL importante permettant de savoir si l'utilisateur à le droit de voir le postit  
@@ -62,40 +104,14 @@ function SelectInfoPostit($idPostit, $idUtilisateur) {
     return $infoPostit->fetch(PDO::FETCH_ASSOC); // Renvoie directement un tableau associatif
 }
 
-function SelectUserPostitPartage($idPostit) {
+
+/*Page Mon Compte */
+
+function updateInfoUtilisateur($pseudo,$email,$idUtilisateur) {
     $bdd = ConnexionDB();
-    $UserPartagePostit = $bdd->prepare("SELECT id_utilisateur, prenom, nom, pseudo from post_it_partage join utilisateur on utilisateur.id_utilisateur = post_it_partage.id_user_partage where id_post_it = ?"); 
-    $UserPartagePostit->execute(array($idPostit));
-
-    // Le fetchall ici est important !! Il va permettre de recupéré toutes les lignes trouvées (fetch recupere que la premiere)
-    return $UserPartagePostit->fetchAll(PDO::FETCH_ASSOC); 
+    $updateInfoUtilisateur = $bdd->prepare('UPDATE utilisateur SET pseudo = ?, email = ? WHERE id_utilisateur = ?');
+    $updateInfoUtilisateur->execute([$pseudo,$email,$idUtilisateur]);
 }
-
-function updatePostit($titre, $contenu, $date_modification, $idPostit, $id_proprio, $couleur){
-     $bdd = ConnexionDB();
-    $updatePostit = $bdd->prepare('UPDATE post_it SET titre = ?, contenu = ?, date_modification = ?, couleur = ? WHERE id_post_it = ? AND id_proprietaire = ?');
-    $updatePostit->execute([$titre, $contenu, $date_modification, $couleur, $idPostit, $id_proprio]);
-}
-
-function deletePartagePostit($idPostit,$idUserPartageDelete){
-    $bdd = ConnexionDB();
-    $deletePartage = $bdd->prepare('DELETE FROM `post_it_partage` WHERE id_post_it = ? AND id_user_partage = ?'); 
-    $deletePartage->execute([$idPostit, $idUserPartageDelete]);
-}
-
-function deletePostit($idPostit,$id_proprio){
-    $bdd = ConnexionDB();
-    $deletePostit = $bdd->prepare('DELETE FROM `post_it` WHERE id_post_it = ? AND id_proprietaire = ?'); 
-    $deletePostit->execute([$idPostit,$id_proprio]);
-}
-
-function insertPostit($id_proprio,$titre,$contenu, $date_creation,$date_modification, $couleur) {
-    $bdd = ConnexionDB();
-    $insertPostit = $bdd->prepare('INSERT INTO post_it (id_proprietaire, titre, contenu, date_creation, date_modification, couleur) VALUES (?, ?, ?, ?, ?, ?)');
-    $insertPostit->execute([$id_proprio, $titre, $contenu, $date_creation, $date_modification, $couleur]);
-    return $bdd->lastInsertId();
-}
-
 
 function supprimerCompteUtilisateur($idUtilisateur) {
     $bdd = ConnexionDB();
