@@ -24,12 +24,6 @@ if(isset($_GET['delete_postit'])){
     header("Location: ../index.php");
 }
 
-
-//Verification Requete SQL importante permettant de savoir si l'utilisateur à le droit de voir le postit  
-// Affiche le postit si : 
-// 1. L'utilisateur connecté sur la page Visualisation est le proprietaire du postit passé dans l'URL 
-// 2. Si l'utilisateur connecté fait parti des utilisateurs partagés 
-
 if (!$infoPostit) { 
         header("Location: ../index.php");
         exit();
@@ -82,16 +76,16 @@ if (isset($couleursHex[$couleur])) {
 
                 <p><?= $infoPostit['contenu'] ?></p><br>
                 
-                <!-- Afficher uniquement si user = proprietaire -->
+                <!-- Afficher les boutons supprimer et modif uniquement si user connecté = proprietaire du postit -->
                 <?php if($_SESSION['idUser'] == $infoPostit['id_proprietaire']){ ?>
 
 
-                    <a href="../creation_edition/create_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation"> <i class="fas fa-edit"></i></a>
-                    <a href="visualisation_postit.php?id=<?= $infoPostit['id_post_it'] ?>&delete_postit=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation delete-button"><i class="fas fa-trash-alt"></i></a>
+                        <a href="../creation_edition/create_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation"> <i class="fas fa-edit"></i></a>
+                        <a href="visualisation_postit.php?id=<?= $infoPostit['id_post_it'] ?>&delete_postit=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation delete-button"><i class="fas fa-trash-alt"></i></a>
         
                 <?php   
                 }
-                  if($userPostitPartage){ ?> <!-- Permet d'afficher le champ unbiquement si un partage existe -->
+                  if($userPostitPartage){ ?> <!-- Permet d'afficher le champ uniquement si un partage existe -->
 
                     <p class="dates">
                         <b>Partagé avec :</b>

@@ -7,5 +7,3 @@ if(isset($_SESSION['idUser'])){
 	session_destroy(); 
 	header("Location: connexion.php");
 }
-
-// var_dump($_SESSION['idUser']) ;

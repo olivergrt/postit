@@ -5,14 +5,15 @@ require_once("../functions.php");
 
 verifSession();
 
-$idPostit = null; 
+$idPostit = null; //Si on est sur une creation
 
-if (isset($_GET['id'])) { // si un id de postit est present dans l'url, donc il sagit potentiellement d'une modif 
+if (isset($_GET['id'])) { // si un id de postit est present dans l'url, donc il sagit potentiellement d'une modification
     
     $idPostit = intval($_GET['id']);
     $SelectInfoPostit = SelectInfoPostit($idPostit,$_SESSION['idUser']); 
 
-    if (!$SelectInfoPostit) { // Vérification si le postit exist et s'il appartient bien à l'utilisateur connecté
+    if (!$SelectInfoPostit) { 
+        // Vérification si le postit exist et s'il appartient bien à l'utilisateur connecté
         header("Location: ../index.php");
         exit();
     }
@@ -22,30 +23,34 @@ if (isset($_GET['id'])) { // si un id de postit est present dans l'url, donc il 
 
 
 if (isset($_POST['save'])) {
-    $erreurs = [];
+    
+    $erreurs = []; /*stockage des erreurs à afficher*/
 
     if (isset($_POST['title'])) {
         $titre = $_POST['title']; 
-    } else {
+    } 
+    else {
         $titre = ''; 
     }
 
     if (isset($_POST['content'])) {
         $contenu = $_POST['content']; 
-    } else {
+    } 
+    else {
         $contenu = '';
     }
 
     if (isset($_POST['couleur'])) {
         $couleur = $_POST['couleur']; 
-    } else {
+    } 
+    else {
         $couleur = '';
     }
 
 
-$id_proprio = $_SESSION['idUser'];
+    $id_proprio = $_SESSION['idUser'];
 
-    // Vérification des champs requis
+    // Vérification des champs obligatoires
     if (empty($titre) || empty($contenu) || empty($couleur)) {
         $erreurs[] = "Tous les champs doivent être complétés.";
     }
@@ -65,28 +70,39 @@ $id_proprio = $_SESSION['idUser'];
         $date_modification = date('Y-m-d H:i:s');
        
 
-        if ($idPostit) {
+        if ($idPostit) { // Si modification 
             updatePostit($titre, $contenu, $date_modification, $idPostit, $id_proprio, $couleur);
-        } else {
+        } 
+        else {    // Si Creation 
             $date_creation = date('Y-m-d H:i:s');
             $idPostit = insertPostit($id_proprio, $titre, $contenu, $date_creation, $date_modification, $couleur);
         }
 
+        
+
         // Gestion des utilisateurs partagés
-        //CETTE PARTIE EST A REVOIR 
+        // Vérifie si des utilisateurs ont été sélectionné pour le partage
         if (!empty($_POST['selected_users'])) {
+
+            // array_filter avec 'ctype_digit' garde uniquement les chiffres donc les ids
             $selectedUsers = array_filter(explode(',', $_POST['selected_users']), 'ctype_digit');
 
             foreach ($selectedUsers as $userId) {
+
+                // vérifie si le post-it a déjà été partagé avec cet utilisateur
                 $VerifDejaPartage = $bdd->prepare('SELECT COUNT(*) FROM post_it_partage WHERE id_post_it = ? AND id_user_partage = ?');
                 $VerifDejaPartage->execute([$idPostit, $userId]);
 
+                // Si ce n'est pas encore le cas (le partage n'existe pas)
                 if ($VerifDejaPartage->fetchColumn() == 0) {
+
+                    // Alors on insère une ligne dans la table de partage
                     $insertShare = $bdd->prepare('INSERT INTO post_it_partage (id_post_it, id_user_partage) VALUES (?, ?)');
                     $insertShare->execute([$idPostit, $userId]);
                 }
             }
         }
+
 
         header("Location: ../visualisation_postit/visualisation_postit.php?id=$idPostit");
         exit();
@@ -97,7 +113,7 @@ $id_proprio = $_SESSION['idUser'];
 
 
 
-/*Lors de la suppression du partage d'un postit avec un utilisateur*/
+/*Suppression du partage d'un postit avec un utilisateur*/
 if(isset($_GET['deleteSharedUser'])){ 
     deletePartagePostit($idPostit,$_GET['deleteSharedUser']);
     header("Location: create_postit.php?id=$idPostit");
@@ -106,12 +122,12 @@ if(isset($_GET['deleteSharedUser'])){
 // Détermination de la couleur du post-it à afficher dans le formulaire
 
 if ($idPostit && isset($SelectInfoPostit['couleur'])) {
-    // Si on est en edition et qu'une couleur est enregistrée pour ce post-it,
-    // alors on récupère cette couleur depuis la base de données
+    // Si le user est en edition et qu'une couleur est enregistrée pour ce post-it
+    /*recuperation de la couleur */
     $color = $SelectInfoPostit['couleur'];
-} else {
-    // Sinon (cas d'une création de post-it ou s'il manque la couleur en base)
-    // on définit la couleur par defaut à "jaune"
+} 
+else {
+    // couleur par defaut jaune
     $color = 'jaune';
 }
 
@@ -155,46 +171,51 @@ if ($idPostit && isset($SelectInfoPostit['couleur'])) {
                     
                     <?php if ($color == 'jaune') { ?>
                         <option value="jaune" selected>Jaune</option>
-                    <?php } else { ?>
+                    <?php } 
+                    else { ?>
                         <option value="jaune">Jaune</option>
                     <?php } ?>
 
                     <?php if ($color == 'orange') { ?>
                         <option value="orange" selected>Orange</option>
-                    <?php } else { ?>
+                    <?php } 
+                    else { ?>
                         <option value="orange">Orange</option>
                     <?php } ?>
 
                     <?php if ($color == 'rouge') { ?>
                         <option value="rouge" selected>Rouge</option>
-                    <?php } else { ?>
+                    <?php } 
+                    else { ?>
                         <option value="rouge">Rouge</option>
                     <?php } ?>
 
                     <?php if ($color == 'vert') { ?>
                         <option value="vert" selected>Vert</option>
-                    <?php } else { ?>
+                    <?php } 
+                    else { ?>
                         <option value="vert">Vert</option>
                     <?php } ?>
 
                     <?php if ($color == 'bleu') { ?>
                         <option value="bleu" selected>Bleu</option>
-                    <?php } else { ?>
+                    <?php } 
+                    else { ?>
                         <option value="bleu">Bleu</option>
                     <?php } ?>
 
                     <?php if ($color == 'rose') { ?>
                         <option value="rose" selected>Rose</option>
-                    <?php } else { ?>
+                    <?php } 
+                    else { ?>
                         <option value="rose">Rose</option>
                     <?php } ?>
                 </select>
 
               <h3 class="mt-4">Partager</h3>
-
               <input type="text" id="search" class="form-control" placeholder="Rechercher un utilisateur...">
 
-              <div class="selected-users mt-3">
+              <div class="selected-users mt-3">       
                 <h5>Partagé avec :</h5>
                 <ul id="selected-list" class="list-group"></ul>
 

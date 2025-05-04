@@ -12,7 +12,6 @@ function verifSession() {
     }
 }
 
-
 function verifAlreadyConnected() {
     if (isset($_SESSION['idUser'])) {
         header("Location: ../index.php");
@@ -48,8 +47,6 @@ function SelectInfoUtilisateur($idUtilisateur) {
 }
 
 
-
-
 /* Page Creation Post it */
 
 function insertPostit($id_proprio,$titre,$contenu, $date_creation,$date_modification, $couleur) {
@@ -61,6 +58,17 @@ function insertPostit($id_proprio,$titre,$contenu, $date_creation,$date_modifica
 
 
 /* Page modification postit */
+
+// Verification des droits d'accès : 
+// 1. Si L'utilisateur connecté sur la page est le pripriotaire du postit passé dans l'URL 
+// 2. Si l'utilisateur connecté sur la page fait parti des utilisateur partagés 
+function SelectInfoPostit($idPostit, $idUtilisateur) {
+    $bdd = ConnexionDB();
+    $infoPostit = $bdd->prepare("SELECT DISTINCT post_it.id_post_it, post_it.id_proprietaire,post_it.titre,post_it.contenu,post_it.date_creation,post_it.date_modification, utilisateur.nom, utilisateur.prenom, post_it.couleur FROM post_it JOIN utilisateur ON utilisateur.id_utilisateur = post_it.id_proprietaire LEFT JOIN post_it_partage ON post_it.id_post_it = post_it_partage.id_post_it WHERE post_it.id_post_it = ? AND (post_it.id_proprietaire = ? OR post_it_partage.id_user_partage = ?);
+                                ");
+    $infoPostit->execute(array($idPostit, $idUtilisateur, $idUtilisateur));
+    return $infoPostit->fetch(PDO::FETCH_ASSOC); // Renvoie directement un tableau associatif
+}
 
 function updatePostit($titre, $contenu, $date_modification, $idPostit, $id_proprio, $couleur){
      $bdd = ConnexionDB();
@@ -92,17 +100,7 @@ function deletePostit($idPostit,$id_proprio){
     $deletePostit->execute([$idPostit,$id_proprio]);
 }
 
-//Verification Requete SQL importante permettant de savoir si l'utilisateur à le droit de voir le postit  
-// Affiche le postit si : 
-// 1. L'utilisateur connecté sur la page est le pripriotaire du postit passé dans l'URL 
-// 2. Si l'utilisateur connecté sur la page fait parti des utilisateur partagés 
-function SelectInfoPostit($idPostit, $idUtilisateur) {
-    $bdd = ConnexionDB();
-    $infoPostit = $bdd->prepare("SELECT DISTINCT post_it.id_post_it, post_it.id_proprietaire,post_it.titre,post_it.contenu,post_it.date_creation,post_it.date_modification, utilisateur.nom, utilisateur.prenom, post_it.couleur FROM post_it JOIN utilisateur ON utilisateur.id_utilisateur = post_it.id_proprietaire LEFT JOIN post_it_partage ON post_it.id_post_it = post_it_partage.id_post_it WHERE post_it.id_post_it = ? AND (post_it.id_proprietaire = ? OR post_it_partage.id_user_partage = ?);
-                                ");
-    $infoPostit->execute(array($idPostit, $idUtilisateur, $idUtilisateur));
-    return $infoPostit->fetch(PDO::FETCH_ASSOC); // Renvoie directement un tableau associatif
-}
+
 
 
 /*Page Mon Compte */
