@@ -152,8 +152,17 @@ else {
       <div class="row justify-content-center">
         <div class="col-sm-8">
           <div class="form-container">
-            <h2 class="text-center mb-4"><?= $idPostit ? "Édition d'un post-it" : "Création d'un post-it" ?></h2> <!-- Change le titre en fonction de si un ID est present dans l'url -->
-
+          <h2 class="text-center mb-4">
+            <?php
+            if ($idPostit) {
+                echo "Édition d'un post-it";
+            } 
+            else {
+                echo "Création d'un post-it";
+            }
+            ?>
+            </h2>
+            
             <form method="POST">
               <div class="form-group mb-3">
                 <label>Titre :</label>

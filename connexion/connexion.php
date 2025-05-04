@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
                     <div class="form-group">
                         <label>Saisir votre mot de passe :</label>
                         <input class="form-control" type="password" value="azertyuiop" name="password">
-                        <small class="form-text text-muted"><a href="#">Mot de passe oublié.</a></small>
+                        <small class="form-text text-muted"><a href="mailto:oliver.grant@universite-paris-saclay.fr">Mot de passe oublié.</a></small>
                     </div>
                     <div class="container text-center text-danger">
                         <?php if (!empty($error)) echo "<p>$error</p>"; ?> <!-- Affichage des erreurs -->

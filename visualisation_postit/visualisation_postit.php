@@ -85,7 +85,7 @@ if (isset($couleursHex[$couleur])) {
         
                 <?php   
                 }
-                  if($userPostitPartage){ ?> <!-- Permet d'afficher le champ uniquement si un partage existe -->
+                  if($userPostitPartage){ ?> <!-- Permet d'afficher le champ unbiquement si un partage existe -->
 
                     <p class="dates">
                         <b>Partagé avec :</b>

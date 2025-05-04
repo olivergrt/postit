@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 07 avr. 2025 à 15:54
+-- Généré le : Dim 04 mai 2025 à 17:40
 -- Version du serveur :  5.7.31
 -- Version de PHP : 7.4.9
 
@@ -35,37 +35,31 @@ CREATE TABLE IF NOT EXISTS `post_it` (
   `contenu` varchar(250) NOT NULL,
   `date_creation` datetime NOT NULL,
   `date_modification` datetime DEFAULT NULL,
+  `couleur` enum('orange','rouge','vert','bleu','jaune','rose') DEFAULT 'jaune',
   PRIMARY KEY (`id_post_it`),
   KEY `fk_post_it_utilisateur` (`id_proprietaire`)
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `post_it`
 --
 
-INSERT INTO `post_it` (`id_post_it`, `id_proprietaire`, `titre`, `contenu`, `date_creation`, `date_modification`) VALUES
-(1, 1, 'test', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a', '2025-03-15 01:05:31', '2025-04-06 00:50:36'),
-(2, 1, 'Révision Controle de gestion', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book', '2025-03-15 01:06:30', NULL),
-(3, 1, 'Faire les courses', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book', '2025-03-15 16:30:51', '2025-04-06 00:55:44'),
-(4, 1, 'Test insert date modification', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book', '2025-04-03 12:03:43', '2025-04-03 12:03:43'),
-(5, 1, 'Yanis', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book', '2025-04-03 13:06:52', '2025-04-04 07:18:25'),
-(7, 1, 'Terminer le developpement', 'Faire la maquette du projet', '2025-04-04 09:14:36', '2025-04-04 09:14:36'),
-(6, 1, 'Finir le projet', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type a', '2025-04-03 21:03:22', '2025-04-03 21:30:26'),
-(8, 1, 'Faire une lettre de motivation', 'de', '2025-04-04 09:58:45', '2025-04-04 09:58:45'),
-(9, 1, 'Faire un CV\r\n', 'de', '2025-04-04 10:01:33', '2025-04-04 10:01:33'),
-(10, 1, 'Télécharger le logiciel', 'de', '2025-04-04 10:02:23', '2025-04-04 10:02:23'),
-(11, 1, 'test 2 partage', 'test', '2025-04-04 10:03:13', '2025-04-04 10:03:13'),
-(12, 1, 'Appeler maman', 'test', '2025-04-04 10:05:07', '2025-04-06 01:25:44'),
-(13, 1, 'Prendre Burger King', 'test', '2025-04-04 12:20:56', '2025-04-06 01:25:33'),
-(14, 1, 'Acheter une pizza', 'test', '2025-04-04 12:21:23', '2025-04-06 01:25:19'),
-(15, 1, 'Ranger l\'appartement', 'test', '2025-04-04 12:22:21', '2025-04-06 01:24:57'),
-(16, 1, 'Poser jour de congé', 'test', '2025-04-04 12:23:27', '2025-04-06 01:24:33'),
-(17, 1, 'Planification vacances', 'test', '2025-04-04 12:29:40', '2025-04-06 01:24:21'),
-(18, 1, 'Livre le livre', 'test', '2025-04-04 12:30:16', '2025-04-06 01:24:04'),
-(19, 2, 'Récupérer le colis', ',', '2025-04-04 12:34:00', '2025-04-06 01:23:49'),
-(20, 1, 'Acheter livre', 'rest', '2025-04-04 12:36:44', '2025-04-06 01:23:37'),
-(21, 1, 'Terminer nettoyage données', 'Lorem Ipsum is simply dummy text of the printing a...', '2025-04-04 12:37:04', '2025-04-06 01:42:25'),
-(22, 1, 'Faire le ménage', 'Katia va faire le ménage', '2025-04-04 12:37:46', '2025-04-07 12:59:25');
+INSERT INTO `post_it` (`id_post_it`, `id_proprietaire`, `titre`, `contenu`, `date_creation`, `date_modification`, `couleur`) VALUES
+(3, 1, 'Faire les courses', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book', '2025-03-15 16:30:51', '2025-04-06 00:55:44', 'jaune'),
+(6, 1, 'Finir le projet', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type a', '2025-04-03 21:03:22', '2025-04-03 21:30:26', 'jaune'),
+(14, 1, 'Acheter une pizza', 'test', '2025-04-04 12:21:23', '2025-04-06 01:25:19', 'jaune'),
+(17, 1, 'Planification vacances', 'test', '2025-04-04 12:29:40', '2025-04-06 01:24:21', 'jaune'),
+(19, 2, 'Récupérer le colis', 'Récupérer le colis à la Poste', '2025-04-04 12:34:00', '2025-04-23 17:06:35', 'jaune'),
+(20, 1, 'Acheter livre', 'rest', '2025-04-04 12:36:44', '2025-04-06 01:23:37', 'jaune'),
+(22, 1, 'Faire le ménage', 'Jean et Paul vont faire le ménage.', '2025-04-04 12:37:46', '2025-05-04 17:35:34', 'jaune'),
+(24, 1, 'Terminer projet TER', 'Terminer le code du projet.', '2025-04-23 15:33:07', '2025-05-01 17:10:44', 'jaune'),
+(27, 1, 'test', 'test', '2025-04-30 12:36:27', '2025-05-01 17:10:52', 'jaune'),
+(26, 2, 'Tondre la pelouse', 'Tondre la pelouse du jardin.', '2025-04-23 17:08:22', '2025-04-23 17:08:22', 'jaune'),
+(25, 2, 'Acheter un barbecue', 'Aller acheter un barbecue à LeroyMerlin', '2025-04-23 17:07:57', '2025-04-23 17:07:57', 'jaune'),
+(33, 1, 'test', 'test', '2025-05-02 14:13:09', '2025-05-02 14:13:09', 'bleu'),
+(34, 39, 'Aller à action', 'Aller installer la box WIFI et acheter une vitre ', '2025-05-03 14:09:58', '2025-05-03 14:09:58', 'bleu'),
+(35, 40, 'Reviser bac de Français', 'Revision de tous les chapitres vu en cours au lycée Talma ', '2025-05-03 16:28:43', '2025-05-03 16:29:48', 'bleu'),
+(36, 1, 'Acheter un barbecue', 'test', '2025-05-03 16:30:24', '2025-05-04 16:53:49', 'orange');
 
 -- --------------------------------------------------------
 
@@ -89,9 +83,24 @@ INSERT INTO `post_it_partage` (`id_post_it`, `id_user_partage`) VALUES
 (1, 6),
 (3, 3),
 (19, 1),
-(22, 2),
+(19, 3),
+(19, 15),
+(19, 30),
 (22, 3),
-(22, 28);
+(22, 28),
+(23, 1),
+(24, 1),
+(24, 2),
+(24, 33),
+(24, 34),
+(25, 1),
+(26, 1),
+(26, 30),
+(27, 2),
+(29, 14),
+(34, 1),
+(35, 9),
+(35, 39);
 
 -- --------------------------------------------------------
 
@@ -110,15 +119,15 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `date_naiss` date DEFAULT NULL,
   PRIMARY KEY (`id_utilisateur`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
 INSERT INTO `utilisateur` (`id_utilisateur`, `email`, `password`, `nom`, `prenom`, `pseudo`, `date_naiss`) VALUES
-(1, 'test@test.com', '1a15f35c518255b94fa9ed88e5ff65332b0d7796', 'Grant', 'Oliver', 'oliver_grt', '2025-03-12'),
-(2, 'katia.b@gmail.com', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'Belhadi', 'Katia', 'katou', '2000-07-16'),
+(1, 'oliver@test.fr', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'Grant', 'Oliver', 'olivergrt', '2025-03-12'),
+(2, 'katia@test.fr', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'Belhadi', 'Katia', 'katou', '2000-07-16'),
 (3, 'jean.dupont1@example.com', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'Dupont', 'Jean', 'jeand1', '1990-05-15'),
 (4, 'jean.dupont2@example.com', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'Dupont', 'Jean', 'jeand2', '1992-07-20'),
 (5, 'jeanne.dupont@example.com', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'Dupont', 'Jeanne', 'jeanneD', '1995-09-30'),
@@ -148,7 +157,14 @@ INSERT INTO `utilisateur` (`id_utilisateur`, `email`, `password`, `nom`, `prenom
 (29, 'quentin.dupuis@example.com', 'dupuisQ', 'Dupuis', 'Quentin', 'QDup', '1992-02-14'),
 (30, 'raphaelle.martinez@example.com', 'martinezR', 'Martinez', 'Raphaëlle', 'RaphM', '1999-03-22'),
 (31, 'sophie.legendre@example.com', 'legendrepass', 'Legendre', 'Sophie', 'SosoL', '2000-05-18'),
-(32, 'thomas.vidal@example.com', 'vidalthomas', 'Vidal', 'Thomas', 'TomV', '1996-12-09');
+(32, 'thomas.vidal@example.com', 'vidalthomas', 'Vidal', 'Thomas', 'TomV', '1996-12-09'),
+(33, 'yanis@test.fr', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'Aggoun', 'Yanis', 'aggouny1', '2025-04-01'),
+(34, 'leti@test.fr', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'Feti', 'Letissia', 'letissiaFeti', '2025-04-16'),
+(35, 'zef@ezf.com', '$2y$10$BvJ7EKuCswqartQOTJdk6eBrxVf8WPuhsjm1G2rlzY/DJq75euJom', 'erg', 'errz', 'rgze', '2025-05-07'),
+(36, 'egz@ezgvlk.com', '$2y$10$N.kiicgL/emhOGbO74fEz./KwVm.2feJKuofyOplWQONwo6wNODbC', 'zef', 'zfe', 'oliver_grt', '2025-05-16'),
+(37, 'ertg@tyyjd.fr', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'gre', 'ezf', 'gre', '2025-05-15'),
+(39, 'cam@grt.fr', '4e5b7b55052bdd41a170c734055ed86b8d3af265', 'Grant', 'Cameron', 'cam_grt', '2002-02-06'),
+(40, 'kieran@grt.fr', '58ad983135fe15c5a8e2e15fb5b501aedcf70dc2', 'Grant', 'Kieran', 'kierangrt', '2008-11-21');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
