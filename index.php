@@ -81,7 +81,9 @@ $couleursHex = [
             <h2>Mes post-it</h2>
             <a href="creation_edition/create_postit.php" class="btn-create">Créer un post-it</a>
 
-            <?php foreach ($infoPostitPerso as $postit) { 
+            <?php 
+            if(empty($infoPostitPerso)){ echo "<center>Oups, aucun post-it pour l’instant !</center>";}
+            foreach ($infoPostitPerso as $postit) { 
 
                 $couleur = $postit['couleur'];
 
@@ -90,13 +92,14 @@ $couleursHex = [
                 } else {
                     $backgroundColor = '#FFF176'; // Jaune par défaut
                 }
-            ?>
+                ?>
                 <div class="postit-list" style="background-color: <?= $backgroundColor ?>;">
                     <p><a href="visualisation_postit/visualisation_postit.php?id=<?= $postit['id_post_it'] ?>">
                         <?= htmlspecialchars($postit['titre']) ?></a>
                     </p>
                     <p>Créé le : <?= date('d/m/Y à H:i' , strtotime($postit['date_creation'])) ?></p>
                 </div>
+
             <?php } ?>
         </div>
 
@@ -106,7 +109,10 @@ $couleursHex = [
         <div class="postit-container">
             <h2 style="margin-bottom: 65px;">Post-it partagés</h2>
 
-            <?php foreach ($infoPostitPartage as $postit) { 
+            <?php 
+            if(empty($infoPostitPartage)){ echo "<center>Vous n’avez reçu aucun post-it partagé par d’autres utilisateurs.<center>";}
+
+            foreach ($infoPostitPartage as $postit) { 
 
                 $couleur = $postit['couleur'];
 
