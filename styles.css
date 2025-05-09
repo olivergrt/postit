@@ -1,132 +1,190 @@
+/* 1) RAZ et typo */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
-
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  color: #333;               /* texte sombre sur fond clair */
 }
-
 
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    background-color: #FFF3D6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #FFF3D6;
+  padding: 0 0 20px 0;
 }
 
-/*Nav bar */
+/* ======================
+   NAVBAR LUMINEUSE
+   ====================== */
 .navbar {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
-    background: white;
-    padding: 10px 0;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  background: linear-gradient(90deg, #FFFFFF 0%, #E0F7FA 100%);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.navbar a {
-    text-decoration: none;
-    color: black;
-    padding: 10px 15px;
-    margin: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    border-bottom: 3px solid transparent;
-    transition: border-color 0.2s;
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.navbar a:hover {
-    border-bottom: 3px solid #007bff;/* effet bleu lorsqu'on passe la souris dessus */
+.navbar-logo {
+  height: 48px;
+  width: auto;
 }
 
-
-@media screen and (max-width: 600px) {
-    .navbar {
-        flex-wrap: nowrap;
-        justify-content: center;
-    }
-
-    .navbar a {
-        margin: 0 8px;
-        font-size: 18px;
-    }
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
+.navbar-right a {
+  color: #333;
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s, transform 0.2s;
+}
 
+.navbar-right a:hover {
+  background-color: rgba(0,0,0,0.05);
+  transform: translateY(-2px);
+}
 
+.navbar-right a.active {
+  border-bottom: 2px solid #4A90E2; /* accent bleu */
+}
+
+/* ======================
+   CONTENU PRINCIPAL
+   ====================== */
 .content {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-    padding: 20px;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 80%;
+  max-width: 1200px;
+  margin-top: 20px;
+  background-color: #FFFFFF; /* fond blanc */
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  overflow: hidden;
 }
 
-.postit-container {
-    width: 45%;
-    display: flex;
+@media (max-width: 768px) {
+  .content {
     flex-direction: column;
+    width: 90%;
+  }
+}
+
+/* ======================
+   LISTE DE POST‑IT
+   ====================== */
+.postit-container {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+
+}
+
+@media (max-width: 768px) {
+  .postit-container {
+    width: 100%;
+  }
 }
 
 .postit-list {
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+/*  background-color: #F9F9F9;*/
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+.postit-list:hover {
+  transform: translateY(-4px);
 }
 
 .postit-list a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #333;
+  text-decoration: none;
+  font-weight: bold;
+/*  color: #4A90E2;*/
+ color: #333333;
+}
+
+.postit-list a:hover {
+/*  color: #6EB7FF;*/
+ color: #333333;
+  text-decoration: underline;
 }
 
 .postit-list p {
-    margin: 5px 0;
-    font-size: 14px;
+  margin: 8px 0;
+  font-size: 0.95rem;
+/*  color: #555;*/
+ color: #333333;
 }
 
+/* ======================
+   BOUTON “CRÉER UN POST‑IT”
+   ====================== */
 .btn-create {
-  background-color: #4A90E2;
-  color: white;
+  background: linear-gradient(45deg, #4A90E2, #357ABD);
+  color: #FFF;
   border: none;
-  padding: 10px 25px;
-  margin-bottom: 20px;
-  border-radius: 25px;
+  padding: 12px 30px;
+  margin-bottom: 25px;
+  border-radius: 30px;
   font-weight: bold;
+  font-size: 1rem;
   text-decoration: none;
-  transition: background-color 0.3s ease;
-  display: inline-block;
   text-align: center;
-  width: 100%; 
+  transition: box-shadow 0.2s, transform 0.2s;
+  width: 100%;
 }
 
 .btn-create:hover {
-  background-color: #357ABD;
-  color: white;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
 }
 
-
-
+/* ======================
+   TITRES
+   ====================== */
 h2 {
-    text-align: center;
-    margin-bottom: 15px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.75rem;
+  color: #333;
 }
 
-
-@media (max-width: 768px) {
-    .content {
-        flex-direction: column;
-        width: 90%;
-    }
-
-    .postit-container {
-        width: 100%;
-    }
+/* ======================
+   UTILITAIRES
+   ====================== */
+.text-center {
+  text-align: center;
 }
 
+.mb-2 { margin-bottom: 0.5rem; }
+.mt-2 { margin-top: 0.5rem; }
+
+/* ======================
+   RESPONSIVE FINALE
+   ====================== */
+@media (max-width: 480px) {
+  .navbar-container { padding: 0.5rem; }
+  .navbar-right a { font-size: 1.1rem; padding: 0.4rem; }
+  .postit-list { padding: 12px; }
+  .btn-create { padding: 10px 20px; font-size: 0.9rem; }
+}

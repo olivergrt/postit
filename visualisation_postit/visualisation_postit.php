@@ -59,9 +59,18 @@ if (isset($couleursHex[$couleur])) {
 </head>
 <body>
     <div class="navbar">
-        <a href="../index.php" title="Accueil"><i class="fas fa-home"></i></a>
-        <a href="../index.php?account=true" title="Mon compte"><i class="fas fa-user"></i></a>
-        <a href="../connexion/deconnexion.php" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></a>
+      <div class="navbar-container">
+        <div class="navbar-left">
+          <a href="../index.php" title="Accueil">
+            <img src="../img/logo.png" alt="Logo" class="navbar-logo">
+          </a>
+        </div>
+        <div class="navbar-right">
+          <a href="../index.php"            title="Accueil"><i class="fas fa-home"></i></a>
+          <a href="../index.php?account=true" title="Mon compte"><i class="fas fa-user"></i></a>
+          <a href="../connexion/deconnexion.php" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+      </div>
     </div>
 
     <main>
@@ -104,7 +113,15 @@ if (isset($couleursHex[$couleur])) {
         </div>
 
         <br>
-        <p class="dates">Dernière modification le : <?= date('d/m/Y à H:i', strtotime($infoPostit['date_modification'])) ?></p>
+
+        <?php 
+        
+        if($infoPostit['date_modification'] != $infoPostit['date_creation']){ ?>
+            
+            <p class="dates">Modifié le : <?= date('d/m/Y à H:i', strtotime($infoPostit['date_modification'])) ?></p>
+        <?php 
+         }           
+        ?>
 
         <p class="dates">Créé le : <?= date('d/m/Y à H:i', strtotime($infoPostit['date_creation'])) ?> par <?= $infoPostit['prenom'] ?> <?= $infoPostit['nom'] ?></p>
         <a href="../index.php" class="btn-page-visualisation">Retour</a>

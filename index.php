@@ -49,6 +49,7 @@ $couleursHex = [
     'bleu'   => '#64B5F6',
     'rose'   => '#F48FB1',
 ];
+
 ?>
 
 <!DOCTYPE html>
@@ -64,12 +65,23 @@ $couleursHex = [
 </head>
 <body>
     <div class="navbar">
-        <a href="index.php" title="Accueil"><i class="fas fa-home"></i></a>
-        <a href="index.php?account=true" title="Mon compte"><i class="fas fa-user"></i></a>
-        <a href="connexion/deconnexion.php" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></a>
+      <div class="navbar-container">
+        <div class="navbar-left">
+          <a href="index.php" title="Accueil">
+            <img src="img/logo.png" alt="Logo" class="navbar-logo">
+          </a>
+        </div>
+        <div class="navbar-right">
+          <a href="index.php"            title="Accueil"><i class="fas fa-home"></i></a>
+          <a href="index.php?account=true" title="Mon compte"><i class="fas fa-user"></i></a>
+          <a href="connexion/deconnexion.php" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+      </div>
     </div>
 
 
+
+    <h4 style="margin : 20px">Bonjour, <?= htmlspecialchars($infoUtilisateur['prenom']); ?></h4>
 
     <?php if (!isset($_GET['account'])){ ?>
 
@@ -97,7 +109,23 @@ $couleursHex = [
                     <p><a href="visualisation_postit/visualisation_postit.php?id=<?= $postit['id_post_it'] ?>">
                         <?= htmlspecialchars($postit['titre']) ?></a>
                     </p>
-                    <p>Créé le : <?= date('d/m/Y à H:i' , strtotime($postit['date_creation'])) ?></p>
+                    <p>
+                        <?php 
+                        if($postit['date_modification'] == $postit['date_creation']){
+                        ?>
+                        Créé le : 
+                        <?php
+                        } 
+                        else{
+                        ?>  
+                        Modifié le : 
+                        <?php
+                        } 
+                        ?>       
+                        <?= date('d/m/Y à H:i' , strtotime($postit['date_modification'])) ?>
+                    </p>
+                    <a href="creation_edition/create_postit.php?id=<?= $postit['id_post_it'] ?>" class="btn-page-visualisation"> <i class="fas fa-edit"></i></a>
+                    <a href="visualisation_postit/visualisation_postit.php?id=<?= $postit['id_post_it'] ?>&delete_postit=<?= $postit['id_post_it'] ?>" class="btn-page-visualisation delete-button"><i class="fas fa-trash-alt"></i></a>
                 </div>
 
             <?php } ?>
@@ -128,8 +156,22 @@ $couleursHex = [
                         <a href="visualisation_postit/visualisation_postit.php?id=<?= $postit['id_post_it'] ?>">
                         <?= htmlspecialchars($postit['titre']) ?></a>
                     </p>
-                    <p>Créé le : <?= date('d/m/Y à H:i', strtotime($postit['date_creation'])) ?></p>
-                    <p>Par : <?= $postit['prenom'] ?> <?= $postit['nom'] ?></p>
+                    <p>
+                       <?php 
+                        if($postit['date_modification'] == $postit['date_creation']){
+                        ?>
+                        Créé le : 
+                        <?php
+                        } 
+                        else{
+                        ?>  
+                        Modifié le : 
+                        <?php
+                        } 
+                        ?>       
+                        <?= date('d/m/Y à H:i' , strtotime($postit['date_modification'])) ?>      
+                    </p>
+                    <p>Partagé par : <?= $postit['prenom'] ?> <?= $postit['nom'] ?></p>
                 </div>
             <?php } ?>
         </div>

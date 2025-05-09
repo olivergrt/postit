@@ -19,32 +19,64 @@ main {
     padding: 20px;
 }
 
-
+/* ======================
+   NAVBAR LUMINEUSE
+   ====================== */
 .navbar {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
-    background: white;
-    padding: 10px 0;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  background: linear-gradient(90deg, #FFFFFF 0%, #E0F7FA 100%);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.navbar a {
-    text-decoration: none;
-    color: black;
-    padding: 10px 15px;
-    margin: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    border-bottom: 3px solid transparent;
-    transition: border-color 0.2s;
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centrage horizontal */
+  gap: 2rem; /* espace entre logo et les liens */
 }
 
-.navbar a:hover {
-    border-bottom: 3px solid #007bff;
+.navbar-left, .navbar-right {
+  display: flex;
+  align-items: center;
 }
+
+.navbar-right {
+  gap: 1rem;
+}
+
+.navbar-logo {
+  height: 48px;
+  width: auto;
+  display: block;
+}
+
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-right a {
+  color: #333;
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.navbar-right a:hover {
+  background-color: rgba(0,0,0,0.05);
+  transform: translateY(-2px);
+}
+
+.navbar-right a.active {
+  border-bottom: 2px solid #4A90E2; /* accent bleu */
+}
+
 
 /* Conteneur du post-it */
 .postit-container {

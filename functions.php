@@ -24,7 +24,7 @@ function verifAlreadyConnected() {
 
 function SelectPostitPersonnel($idUtilisateur){
     $bdd = ConnexionDB();
-    $infoPostitPerso = $bdd->prepare("SELECT id_post_it,titre,date_creation,date_modification,couleur FROM post_it where id_proprietaire = ? ORDER BY date_creation desc");
+    $infoPostitPerso = $bdd->prepare("SELECT id_post_it,titre,date_creation,date_modification,couleur FROM post_it where id_proprietaire = ? ORDER BY date_modification desc");
     $infoPostitPerso->execute(array($idUtilisateur));
     
     return $infoPostitPerso->fetchAll(PDO::FETCH_ASSOC); // permet de mettre les données dans un tableau associatif pour chaque post it 
@@ -33,7 +33,7 @@ function SelectPostitPersonnel($idUtilisateur){
 
 function SelectPostitPartage($idUtilisateur){
     $bdd = ConnexionDB();
-    $infoPostitPartage = $bdd->prepare("SELECT post_it.id_post_it,titre,date_creation,date_modification,nom, prenom, couleur FROM post_it join post_it_partage on post_it.id_post_it = post_it_partage.id_post_it join utilisateur on post_it.id_proprietaire = utilisateur.id_utilisateur where id_user_partage = ? ORDER BY date_creation desc");
+    $infoPostitPartage = $bdd->prepare("SELECT post_it.id_post_it,titre,date_creation,date_modification,nom, prenom, couleur FROM post_it join post_it_partage on post_it.id_post_it = post_it_partage.id_post_it join utilisateur on post_it.id_proprietaire = utilisateur.id_utilisateur where id_user_partage = ? ORDER BY date_modification desc");
     $infoPostitPartage->execute(array($idUtilisateur));
     
     return $infoPostitPartage->fetchAll(PDO::FETCH_ASSOC); // permet de mettre les données dans un tableau associatif pour chaque post it 
@@ -94,12 +94,27 @@ function SelectUserPostitPartage($idPostit) {
     return $UserPartagePostit->fetchAll(PDO::FETCH_ASSOC); 
 }
 
-function deletePostit($idPostit,$id_proprio){
+function deletePostit($idPostit, $id_proprio) {
     $bdd = ConnexionDB();
-    $deletePostit = $bdd->prepare('DELETE FROM `post_it` WHERE id_post_it = ? AND id_proprietaire = ?'); 
-    $deletePostit->execute([$idPostit,$id_proprio]);
-}
 
+    try {
+        $bdd->beginTransaction();
+
+        // Supprimer les partages liés à ce post-it
+        $deletePartages = $bdd->prepare('DELETE FROM `post_it_partage` WHERE id_post_it = ?');
+        $deletePartages->execute([$idPostit]);
+
+        // Supprimer le post-it lui-même
+        $deletePostit = $bdd->prepare('DELETE FROM `post_it` WHERE id_post_it = ? AND id_proprietaire = ?'); 
+        $deletePostit->execute([$idPostit, $id_proprio]);
+
+        $bdd->commit();
+    } catch (Exception $e) {
+        // Annule tout en cas d'erreur
+        $bdd->rollBack();
+        throw $e; 
+    }
+}
 
 
 

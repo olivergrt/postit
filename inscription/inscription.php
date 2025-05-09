@@ -1,178 +1,194 @@
 <?php
 session_start();
-require_once('../config.php'); 
+require_once('../config.php');
 require_once("../functions.php");
 
-verifAlreadyConnected(); 
+// Redirige si déjà connecté
+verifAlreadyConnected();
 
-// Initialisation des erreurs
-$erreur_prenom = $erreur_nom = $erreur_pseudo = $erreur_email = $erreur_datenaiss = $erreur_password = $erreur_password_confirm = $erreur_accept = "";
+// Tableaux pour stocker les erreurs et les valeurs précédemment saisies
+$errors = [];
 $values = [];
 
-if (isset($_POST['inscription'])) {
-    $prenom = htmlspecialchars($_POST['prenom'] ?? '');
-    $nom = htmlspecialchars($_POST['nom'] ?? '');
-    $pseudo = htmlspecialchars($_POST['pseudo'] ?? '');
-    $email = htmlspecialchars($_POST['email'] ?? '');
-    $datenaiss = htmlspecialchars($_POST['datenaiss'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $password_confirm = $_POST['password_confirm'] ?? '';
-    $accept = $_POST['accept'] ?? '';
+// ** Initialisation obligatoire de 'accept' pour ne plus déclencher de notice **
+$values['accept'] = false;
 
-    $values = compact('prenom', 'nom', 'pseudo', 'email', 'datenaiss');
+// Si le formulaire a été soumis...
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // 1) Récupération et nettoyage des valeurs basiques
+    $fields = ['prenom','nom','pseudo','email','password','password_confirm'];
+    foreach ($fields as $f) {
+        $values[$f] = trim($_POST[$f] ?? '');
+    }
+    // Case à cocher
+    $values['accept'] = isset($_POST['accept']);
+    // Date de naissance en trois champs
+    $values['jour']  = $_POST['jour']  ?? '';
+    $values['mois']  = $_POST['mois']  ?? '';
+    $values['annee']= $_POST['annee'] ?? '';
 
-    $form_valid = true;
-
-    if (empty($prenom)) {
-        $erreur_prenom = "Veuillez renseigner votre prénom.";
-        $form_valid = false;
+    // 2) Validation côté serveur (mêmes règles qu’en JS)
+    if ($values['prenom']==='') {
+        $errors['prenom'] = "Prénom requis.";
     }
-    if (empty($nom)) {
-        $erreur_nom = "Veuillez renseigner votre nom.";
-        $form_valid = false;
+    if ($values['nom']==='') {
+        $errors['nom'] = "Nom requis.";
     }
-    if (empty($pseudo)) {
-        $erreur_pseudo = "Veuillez renseigner un pseudo.";
-        $form_valid = false;
-    }
-    if (empty($email)) {
-        $erreur_email = "Veuillez renseigner une adresse mail.";
-        $form_valid = false;
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $erreur_email = "Adresse mail invalide.";
-        $form_valid = false;
-    }
-    if (empty($datenaiss)) {
-        $erreur_datenaiss = "Veuillez indiquer votre date de naissance.";
-        $form_valid = false;
-    }
-    if (empty($password)) {
-        $erreur_password = "Veuillez renseigner un mot de passe.";
-        $form_valid = false;
-    } elseif (strlen($password) < 8) {
-        $erreur_password = "Le mot de passe doit contenir au moins 8 caractères.";
-        $form_valid = false;
-    }
-    if (empty($password_confirm)) {
-        $erreur_password_confirm = "Veuillez confirmer votre mot de passe.";
-        $form_valid = false;
-    } elseif ($password !== $password_confirm) {
-        $erreur_password_confirm = "Les mots de passe ne correspondent pas.";
-        $form_valid = false;
-    }
-    if (empty($accept)) {
-        $erreur_accept = "Vous devez accepter les conditions.";
-        $form_valid = false;
-    }
-
-    if ($form_valid) {
-    // Vérifie si le pseudo existe déja
-    $checkPseudo = $bdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE pseudo = ?");
-    $checkPseudo->execute([$pseudo]);
-    $pseudoExists = $checkPseudo->fetchColumn();
-
-    if ($pseudoExists > 0) {
-        $erreur = "Ce pseudo est déjà utilisé. Veuillez en choisir un autre.";
+    if ($values['pseudo']==='') {
+        $errors['pseudo'] = "Pseudo requis.";
     } else {
-        $password = sha1($_POST['password']);
+        // Vérifie unicité du pseudo
+        $stmt = $bdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE pseudo = ?");
+        $stmt->execute([$values['pseudo']]);
+        if ($stmt->fetchColumn() > 0) {
+            $errors['pseudo'] = "Pseudo déjà utilisé.";
+        }
+    }
+    if ($values['email']==='') {
+        $errors['email'] = "Email requis.";
+    } elseif (!filter_var($values['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = "Email invalide.";
+    } else {
+        // Vérifie unicité de l'email
+        $stmt = $bdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE email = ?");
+        $stmt->execute([$values['email']]);
+        if ($stmt->fetchColumn() > 0) {
+            $errors['email'] = "Email déjà utilisé.";
+        }
+    }
+    // Date de naissance
+    if ($values['jour']==='' || $values['mois']==='' || $values['annee']==='') {
+        $errors['datenaiss'] = "Date de naissance requise.";
+    } elseif (!checkdate((int)$values['mois'], (int)$values['jour'], (int)$values['annee'])) {
+        $errors['datenaiss'] = "Date invalide.";
+    } else {
+        // Stocke au format SQL
+        $values['datenaiss'] = sprintf(
+            '%04d-%02d-%02d',
+            (int)$values['annee'],
+            (int)$values['mois'],
+            (int)$values['jour']
+        );
+    }
+    // Mot de passe
+    if (strlen($values['password']) < 8) {
+        $errors['password'] = "Minimum 8 caractères.";
+    }
+    if ($values['password_confirm'] !== $values['password']) {
+        $errors['password_confirm'] = "Mots de passe différents.";
+    }
+    // Case à cocher
+    if (!$values['accept']) {
+        $errors['accept'] = "Veuillez accepter les conditions.";
+    }
 
-        $insertmbr = $bdd->prepare('
-            INSERT INTO utilisateur (email, password, nom, prenom, pseudo, date_naiss) 
-            VALUES (?, ?, ?, ?, ?, ?)');
-        $insertmbr->execute([$email, $password, $nom, $prenom, $pseudo, $datenaiss]);
-
+    // 3) Si tout est bon, on insère et redirige
+    if (empty($errors)) {
+        $pwdHash = sha1($values['password']);
+        $stmt = $bdd->prepare(
+            'INSERT INTO utilisateur (email, password, nom, prenom, pseudo, date_naiss)
+             VALUES (?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([
+            $values['email'],
+            $pwdHash,
+            $values['nom'],
+            $values['prenom'],
+            $values['pseudo'],
+            $values['datenaiss']
+        ]);
         header("Location: ../connexion/connexion.php");
         exit();
     }
 }
-
-}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Inscription</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script defer src="inscription.js"></script>
 </head>
 <body>
+    <center><img style="width: 140px;" src="../img/logo.png" alt="Logo"></center>
+  <div class="form-container">
+    <a href="../connexion/connexion.php" class="btn-return">← Retour à la connexion</a>
+    <h2>Inscription</h2>
+    <form method="POST" name="inscriptionForm" novalidate>
+      <?php
+      function showError($field) {
+        global $errors;
+        if (isset($errors[$field])) {
+          echo "<div class='error-message'>{$errors[$field]}</div>";
+        }
+      }
+      ?>
 
-    <div class="container mt-5">
-      <div class="row justify-content-center">
-        <div class="col-sm-6">
-          <div class="form-container">
-            <a href="../connexion/connexion.php" class="btn btn-connexion mb-3">← Retour à la connexion</a>
-            <h2 class="text-center mb-4">Inscription</h2>
+      <input class="form-input <?php if(isset($errors['prenom'])) echo 'is-invalid'; ?>"
+             name="prenom" placeholder="Prénom"
+             value="<?=htmlspecialchars($values['prenom'] ?? '')?>">
+      <?php showError('prenom'); ?>
 
-            <?php if (isset($erreur)): ?>
-              <div class="alert alert-danger text-center"><?php echo $erreur; ?></div>
-            <?php endif; ?>
+      <input class="form-input <?php if(isset($errors['nom'])) echo 'is-invalid'; ?>"
+             name="nom" placeholder="Nom"
+             value="<?=htmlspecialchars($values['nom'] ?? '')?>">
+      <?php showError('nom'); ?>
 
-           <form method="POST" action="inscription.php">
-    		  <div class="form-group mb-3">
-    		    <label>Votre Prénom :</label>
-    		    <input class="form-control <?php echo $erreur_prenom ? 'is-invalid' : ''; ?>" type="text" name="prenom" value="<?php echo $values['prenom'] ?? ''; ?>">
-    		    <div class="invalid-feedback"><?php echo $erreur_prenom; ?></div>
-    		  </div>
+      <input class="form-input <?php if(isset($errors['pseudo'])) echo 'is-invalid'; ?>"
+             name="pseudo" placeholder="Pseudo"
+             value="<?=htmlspecialchars($values['pseudo'] ?? '')?>">
+      <?php showError('pseudo'); ?>
 
-    		  <div class="form-group mb-3">
-    		    <label>Votre Nom :</label>
-    		    <input class="form-control <?php echo $erreur_nom ? 'is-invalid' : ''; ?>" type="text" name="nom" value="<?php echo $values['nom'] ?? ''; ?>">
-    		    <div class="invalid-feedback"><?php echo $erreur_nom; ?></div>
-    		  </div>
+      <input class="form-input <?php if(isset($errors['email'])) echo 'is-invalid'; ?>"
+             name="email" placeholder="Email"
+             value="<?=htmlspecialchars($values['email'] ?? '')?>">
+      <?php showError('email'); ?>
 
-    		  <div class="form-group mb-3">
-    		    <label>Pseudo :</label>
-    		    <input class="form-control <?php echo $erreur_pseudo ? 'is-invalid' : ''; ?>" type="text" name="pseudo" value="<?php echo $values['pseudo'] ?? ''; ?>">
-    		    <div class="invalid-feedback"><?php echo $erreur_pseudo; ?></div>
-    		  </div>
-
-    		  <div class="form-group mb-3">
-    		    <label>Votre adresse mail :</label>
-    		    <input class="form-control <?php echo $erreur_email ? 'is-invalid' : ''; ?>" type="" name="email" value="<?php echo $values['email'] ?? ''; ?>">
-    		    <div class="invalid-feedback"><?php echo $erreur_email; ?></div>
-    		  </div>
-
-    		  <div class="form-group mb-3">
-    		    <label>Date de naissance :</label>
-    		    <input class="form-control <?php echo $erreur_datenaiss ? 'is-invalid' : ''; ?>" type="date" name="datenaiss" value="<?php echo $values['datenaiss'] ?? ''; ?>">
-    		    <div class="invalid-feedback"><?php echo $erreur_datenaiss; ?></div>
-    		  </div>
-
-    		  <div class="form-group mb-3">
-    		    <label>Votre mot de passe :</label>
-    		    <input class="form-control <?php echo $erreur_password ? 'is-invalid' : ''; ?>" type="password" name="password">
-    		    <div class="invalid-feedback"><?php echo $erreur_password; ?></div>
-    		  </div>
-
-    		  <div class="form-group mb-3">
-    		    <label>Confirmer le mot de passe :</label>
-    		    <input class="form-control <?php echo $erreur_password_confirm ? 'is-invalid' : ''; ?>" type="password" name="password_confirm">
-    		    <div class="invalid-feedback"><?php echo $erreur_password_confirm; ?></div>
-    		  </div>
-
-    		  <div class="form-check mb-4">
-    		    <input class="form-check-input <?php echo $erreur_accept ? 'is-invalid' : ''; ?>" type="checkbox" name="accept" id="accept" <?php echo isset($accept) ? 'checked' : ''; ?>>
-    		    <label class="form-check-label" for="accept">
-    		      J'accepte les <a href="conditions.html">conditions d'utilisation</a>.
-    		    </label>
-    		    <div class="invalid-feedback d-block"><?php echo $erreur_accept; ?></div>
-    		  </div>
-
-    		  <button class="btn btn-inscription" name="inscription">Valider l'inscription</button>
-    		</form>
-          </div>
-        </div>
+      <div class="form-date">
+        <select name="annee" class="form-select <?php if(isset($errors['datenaiss'])) echo 'is-invalid'; ?>">
+          <option value="">Année</option>
+          <?php $curr = date('Y'); for($i=$curr;$i>=1900;$i--) {
+            $sel = (isset($values['annee']) && $values['annee']==$i)?'selected':''; 
+            echo "<option $sel>$i</option>";
+          } ?>
+        </select>
+        <select name="mois" class="form-select <?php if(isset($errors['datenaiss'])) echo 'is-invalid'; ?>">
+          <option value="">Mois</option>
+          <?php for($m=1;$m<=12;$m++){
+            $sel=(isset($values['mois'])&&$values['mois']==$m)?'selected':''; 
+            echo "<option $sel>$m</option>";
+          } ?>
+        </select>
+        <select name="jour" class="form-select <?php if(isset($errors['datenaiss'])) echo 'is-invalid'; ?>">
+          <option value="">Jour</option>
+          <?php for($d=1;$d<=31;$d++){
+            $sel=(isset($values['jour'])&&$values['jour']==$d)?'selected':''; 
+            echo "<option $sel>$d</option>";
+          } ?>
+        </select>
       </div>
-    </div>
-    <center>
-        <img style="width: 130px;padding-bottom: 40px;padding-top: 40px;" src="../img/logo_upsaclay.png" alt="Logo">
-        <img style="width: 90px;" src="../img/logo_miage.png" alt="Logo">
-    </center>
+      <?php showError('datenaiss'); ?>
 
+      <input type="password"
+             class="form-input <?php if(isset($errors['password'])) echo 'is-invalid'; ?>"
+             name="password" placeholder="Mot de passe">
+      <?php showError('password'); ?>
+
+      <input type="password"
+             class="form-input <?php if(isset($errors['password_confirm'])) echo 'is-invalid'; ?>"
+             name="password_confirm" placeholder="Confirme mot de passe">
+      <?php showError('password_confirm'); ?>
+
+      <div class="checkbox-container">
+        <input type="checkbox" id="accept" name="accept" <?= $values['accept']?'checked':'' ?>>
+        <label for="accept">J'accepte <a href="conditions.html">les conditions d'utilisation</a></label>
+      </div>
+      <?php showError('accept'); ?>
+
+      <button class="submit-button" type="submit">S'inscrire</button>
+    </form>
+  </div>
 </body>
 </html>

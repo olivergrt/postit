@@ -56,11 +56,11 @@ if (isset($_POST['save'])) {
     }
 
     // Vérification des longueurs
-    if (strlen($titre) > 30) {
+    if (strlen($titre) > 150) { 
         $erreurs[] = "Le titre doit comporter au maximum 30 caractères.";
     }
 
-    if (strlen($contenu) > 250) {
+    if (strlen($contenu) > 600) { 
         $erreurs[] = "Le contenu doit comporter au maximum 250 caractères.";
     }
 
@@ -84,8 +84,11 @@ if (isset($_POST['save'])) {
         // Vérifie si des utilisateurs ont été sélectionné pour le partage
         if (!empty($_POST['selected_users'])) {
 
+            $ids = explode(',', $_POST['selected_users']);
             // array_filter avec 'ctype_digit' garde uniquement les chiffres donc les ids
-            $selectedUsers = array_filter(explode(',', $_POST['selected_users']), 'ctype_digit');
+            $selectedUsers = array_filter($ids, function($id) {
+                return ctype_digit($id);
+            });
 
             foreach ($selectedUsers as $userId) {
 
@@ -94,7 +97,7 @@ if (isset($_POST['save'])) {
                 $VerifDejaPartage->execute([$idPostit, $userId]);
 
                 // Si ce n'est pas encore le cas (le partage n'existe pas)
-                if ($VerifDejaPartage->fetchColumn() == 0) {
+                if ($VerifDejaPartage->fetchColumn() == 0) { /*fetchColumn retourne la valeur unique */
 
                     // Alors on insère une ligne dans la table de partage
                     $insertShare = $bdd->prepare('INSERT INTO post_it_partage (id_post_it, id_user_partage) VALUES (?, ?)');
@@ -147,7 +150,6 @@ else {
     <title>Créer ou Éditer un post-it</title>
 </head>
 <body">
-
     <div class="container mt-5">
       <div class="row justify-content-center">
         <div class="col-sm-8">
@@ -166,13 +168,12 @@ else {
             <form method="POST">
               <div class="form-group mb-3">
                 <label>Titre :</label>
-                <input class="form-control" type="text" placeholder="Max 30 caractères" name="title"
-                  value="<?= $idPostit ? htmlspecialchars($SelectInfoPostit['titre']) : '' ?>">
+                <input class="form-control" type="text" placeholder="Max 150 caractères" name="title" value="<?= $idPostit ? htmlspecialchars($SelectInfoPostit['titre']) : '' ?>" maxlength="150">
               </div>
 
               <div class="form-group mb-3">
                 <label>Contenu :</label>
-                <textarea class="form-control" name="content" rows="4" placeholder="Max 200 caractères"><?= $idPostit ? htmlspecialchars($SelectInfoPostit['contenu']) : '' ?></textarea>
+                <textarea class="form-control" name="content" maxlength="600" rows="4" placeholder="Max 200 caractères"><?= $idPostit ? htmlspecialchars($SelectInfoPostit['contenu']) : '' ?></textarea>
               </div>
               
               <label for="couleur">Couleur du post-it :</label>

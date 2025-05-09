@@ -49,7 +49,7 @@ if (isset($_POST['submit'])) {
         <div class="col-sm-6">
             <div class="form-container">
                 <h2 class="text-center">Connexion</h2>
-                <form method="POST" action="connexion.php">
+                <form method="POST" action="">
                     <div class="form-group">
                         <label>Saisir votre adresse mail :</label>
                         <input class="form-control" type="email" value="oliver@test.fr" name="email">
