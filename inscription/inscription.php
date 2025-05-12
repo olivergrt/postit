@@ -86,17 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($errors)) {
         $pwdHash = sha1($values['password']);
         $stmt = $bdd->prepare(
-            'INSERT INTO utilisateur (email, password, nom, prenom, pseudo, date_naiss)
-             VALUES (?, ?, ?, ?, ?, ?)'
-        );
-        $stmt->execute([
-            $values['email'],
-            $pwdHash,
-            $values['nom'],
-            $values['prenom'],
-            $values['pseudo'],
-            $values['datenaiss']
-        ]);
+            'INSERT INTO utilisateur (email, password, nom, prenom, pseudo, date_naiss) VALUES (?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$values['email'],$pwdHash,$values['nom'],$values['prenom'],$values['pseudo'],$values['datenaiss']]);
         header("Location: ../connexion/connexion.php");
         exit();
     }
@@ -127,23 +118,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       ?>
 
       <input class="form-input <?php if(isset($errors['prenom'])) echo 'is-invalid'; ?>"
-             name="prenom" placeholder="Prénom"
-             value="<?=htmlspecialchars($values['prenom'] ?? '')?>">
+             name="prenom" placeholder="Prénom" value="<?=htmlspecialchars($values['prenom'] ?? '')?>">
       <?php showError('prenom'); ?>
 
       <input class="form-input <?php if(isset($errors['nom'])) echo 'is-invalid'; ?>"
-             name="nom" placeholder="Nom"
-             value="<?=htmlspecialchars($values['nom'] ?? '')?>">
+             name="nom" placeholder="Nom" value="<?=htmlspecialchars($values['nom'] ?? '')?>">
       <?php showError('nom'); ?>
 
       <input class="form-input <?php if(isset($errors['pseudo'])) echo 'is-invalid'; ?>"
-             name="pseudo" placeholder="Pseudo"
-             value="<?=htmlspecialchars($values['pseudo'] ?? '')?>">
+             name="pseudo" placeholder="Pseudo" value="<?=htmlspecialchars($values['pseudo'] ?? '')?>">
       <?php showError('pseudo'); ?>
 
       <input class="form-input <?php if(isset($errors['email'])) echo 'is-invalid'; ?>"
-             name="email" placeholder="Email"
-             value="<?=htmlspecialchars($values['email'] ?? '')?>">
+             name="email" placeholder="Email" type="email" value="<?=htmlspecialchars($values['email'] ?? '')?>">
       <?php showError('email'); ?>
 
       <div class="form-date">

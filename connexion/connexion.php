@@ -37,6 +37,7 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="connexion.js"></script>
     <title>Connexion - Post IT</title>
 </head>
 <body>
@@ -52,15 +53,15 @@ if (isset($_POST['submit'])) {
                 <form method="POST" action="">
                     <div class="form-group">
                         <label>Saisir votre adresse mail :</label>
-                        <input class="form-control" type="email" value="oliver@test.fr" name="email">
+                        <input id="email" class="form-control" type="email" value="oliver@test.fr" name="email">
                     </div>
                     <br>
                     <div class="form-group">
                         <label>Saisir votre mot de passe :</label>
-                        <input class="form-control" type="password" value="azertyuiop" name="password">
+                        <input id="password" class="form-control" type="password" value="azertyuiop" name="password">
                         <small class="form-text text-muted"><a href="mailto:oliver.grant@universite-paris-saclay.fr">Mot de passe oublié.</a></small>
                     </div>
-                    <div class="container text-center text-danger">
+                    <div class="container text-center text-danger" id="client-error">
                         <?php if (!empty($error)) echo "<p>$error</p>"; ?> <!-- Affichage des erreurs -->
                     </div>
                     <br>
@@ -77,5 +78,55 @@ if (isset($_POST['submit'])) {
        <img style="width: 130px;padding-bottom: 40px;padding-top: 40px;" src="../img/logo_upsaclay.png" alt="Logo">
         <img style="width: 90px;" src="../img/logo_miage.png" alt="Logo">
     </center>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const errorDiv = document.getElementById("client-error");
+
+    form.addEventListener("submit", function (e) {
+        // Réinitialisation
+        email.classList.remove("input-error");
+        password.classList.remove("input-error");
+        errorDiv.textContent = "";
+
+        let hasError = false;
+        let messages = [];
+
+        // Vérifie si email est vide
+        if (email.value.trim() === "") {
+            email.classList.add("input-error");
+            messages.push("L'adresse email est requise.");
+            hasError = true;
+        } else {
+            // Vérifie le format de l'email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value.trim())) {
+                email.classList.add("input-error");
+                messages.push("Le format de l'adresse email est invalide.");
+                hasError = true;
+            }
+        }
+
+        // Vérifie si le mot de passe est vide
+        if (password.value.trim() === "") {
+            password.classList.add("input-error");
+            messages.push("Le mot de passe est requis.");
+            hasError = true;
+        }
+
+        if (hasError) {
+            e.preventDefault(); // Bloque l'envoi
+            errorDiv.innerHTML = messages.map(msg => `<p>${msg}</p>`).join("");
+        }
+    });
+});
+
+</script>
+
 </body>
 </html>
+
+

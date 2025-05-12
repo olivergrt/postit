@@ -85,7 +85,7 @@ $couleursHex = [
 
     <?php if (!isset($_GET['account'])){ ?>
 
-    <div class="content">
+    <div class="content postit-content">
 
         <!-- Affichage de Mes post-its -->
 
@@ -124,8 +124,15 @@ $couleursHex = [
                         ?>       
                         <?= date('d/m/Y à H:i' , strtotime($postit['date_modification'])) ?>
                     </p>
-                    <a href="creation_edition/create_postit.php?id=<?= $postit['id_post_it'] ?>" class="btn-page-visualisation"> <i class="fas fa-edit"></i></a>
-                    <a href="visualisation_postit/visualisation_postit.php?id=<?= $postit['id_post_it'] ?>&delete_postit=<?= $postit['id_post_it'] ?>" class="btn-page-visualisation delete-button"><i class="fas fa-trash-alt"></i></a>
+                    
+                    <div class="button-wrapper">
+                      <a href="creation_edition/create_postit.php?id=<?= $postit['id_post_it'] ?>" class="btn-page-visualisation">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <a href="visualisation_postit/visualisation_postit.php?id=<?= $postit['id_post_it'] ?>&delete_postit=<?= $postit['id_post_it'] ?>" class="btn-page-visualisation delete-button">
+                        <i class="fas fa-trash-alt"></i>
+                      </a>
+                    </div>
                 </div>
 
             <?php } ?>

@@ -88,6 +88,22 @@ body {
 /* ======================
    LISTE DE POST‑IT
    ====================== */
+
+
+.postit-content {
+  border: 2px dashed #A5D6A7;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #C8E6C9;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
 .postit-container {
   width: 45%;
   display: flex;
@@ -133,6 +149,16 @@ body {
   font-size: 0.95rem;
 /*  color: #555;*/
  color: #333333;
+}
+
+
+/* BOUTON Suppresion Edition postit  */
+
+.button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
 }
 
 /* ======================

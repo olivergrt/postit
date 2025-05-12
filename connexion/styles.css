@@ -3,6 +3,12 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.input-error {
+  border: 2px solid red !important;
+  background-color: #ffe6e6;
+}
+
+
 .form-container {
   background-color: #FFFA90;
   border-radius: 20px;
