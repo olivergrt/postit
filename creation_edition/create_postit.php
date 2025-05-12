@@ -67,6 +67,7 @@ if (isset($_POST['save'])) {
     if (empty($erreurs)) {
         $titre = htmlspecialchars($titre);
         $contenu = htmlspecialchars($contenu);
+        date_default_timezone_set('Europe/Paris');
         $date_modification = date('Y-m-d H:i:s');
        
 
@@ -168,12 +169,12 @@ else {
             <form method="POST">
               <div class="form-group mb-3">
                 <label>Titre :</label>
-                <input class="form-control" type="text" placeholder="Max 150 caractères" name="title" value="<?= $idPostit ? htmlspecialchars($SelectInfoPostit['titre']) : '' ?>" maxlength="150">
+                <input class="form-control" type="text" id="title" placeholder="Max 150 caractères" name="title" value="<?= $idPostit ? htmlspecialchars($SelectInfoPostit['titre']) : '' ?>" maxlength="150">
               </div>
 
               <div class="form-group mb-3">
                 <label>Contenu :</label>
-                <textarea class="form-control" name="content" maxlength="600" rows="4" placeholder="Max 200 caractères"><?= $idPostit ? htmlspecialchars($SelectInfoPostit['contenu']) : '' ?></textarea>
+                <textarea class="form-control" id="content" name="content" maxlength="600" rows="4" placeholder="Max 200 caractères"><?= $idPostit ? htmlspecialchars($SelectInfoPostit['contenu']) : '' ?></textarea>
               </div>
               
               <label for="couleur">Couleur du post-it :</label>
@@ -257,6 +258,7 @@ else {
     <br>
     <center> <a href="../index.php" class="btn-retour">Retour</a></center>
     <script src="search_user.js"></script>
+    <script src="create_postit.js"></script>
 </body>
 </html>
 
