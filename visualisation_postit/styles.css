@@ -7,7 +7,7 @@
 
 body {
     min-height: 100vh;
-    background-color: #FFF3D6;
+    background: linear-gradient(90deg, #24344D 0%, #152C45 100%);
     margin: 0;
     padding: 0;
 }
@@ -19,12 +19,12 @@ main {
     padding: 20px;
 }
 
-/* ======================
-   NAVBAR LUMINEUSE
-   ====================== */
+/* 
+   NAVBAR 
+    */
 .navbar {
   width: 100%;
-  background: linear-gradient(90deg, #FFFFFF 0%, #E0F7FA 100%);
+   background: linear-gradient(90deg, #24344D 0%, #152C45 100%);
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
@@ -58,6 +58,10 @@ main {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.icon-navbar{
+  color: white;
 }
 
 .navbar-right a {

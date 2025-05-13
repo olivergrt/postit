@@ -66,9 +66,9 @@ if (isset($couleursHex[$couleur])) {
           </a>
         </div>
         <div class="navbar-right">
-          <a href="../index.php"            title="Accueil"><i class="fas fa-home"></i></a>
-          <a href="../index.php?account=true" title="Mon compte"><i class="fas fa-user"></i></a>
-          <a href="../connexion/deconnexion.php" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></a>
+          <a href="../index.php"            title="Accueil"><i class="fas fa-home icon-navbar"></i></a>
+          <a href="../index.php?account=true" title="Mon compte"><i class="fas fa-user icon-navbar"></i></a>
+          <a href="../connexion/deconnexion.php" title="Déconnexion"><i class="fas fa-sign-out-alt icon-navbar"></i></a>
         </div>
       </div>
     </div>
@@ -85,15 +85,7 @@ if (isset($couleursHex[$couleur])) {
 
                 <p><?= $infoPostit['contenu'] ?></p><br>
                 
-                <!-- Afficher les boutons supprimer et modif uniquement si user connecté = proprietaire du postit -->
-                <?php if($_SESSION['idUser'] == $infoPostit['id_proprietaire']){ ?>
-
-
-                        <a href="../creation_edition/create_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation"> <i class="fas fa-edit"></i></a>
-                        <a href="visualisation_postit.php?id=<?= $infoPostit['id_post_it'] ?>&delete_postit=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation delete-button"><i class="fas fa-trash-alt"></i></a>
-        
-                <?php   
-                }
+                <?php
                   if($userPostitPartage){ ?> <!-- Permet d'afficher le champ unbiquement si un partage existe -->
 
                     <p class="dates">
@@ -108,7 +100,20 @@ if (isset($couleursHex[$couleur])) {
                     <?php 
                     endforeach; 
                     }?>
+
+                    <!-- Afficher les boutons supprimer et modif uniquement si user connecté = proprietaire du postit -->
+                <?php if($_SESSION['idUser'] == $infoPostit['id_proprietaire']){ ?>
+
+
+                        <a href="../creation_edition/create_postit.php?id=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation"> <i class="fas fa-edit"></i></a>
+                        <a href="visualisation_postit.php?id=<?= $infoPostit['id_post_it'] ?>&delete_postit=<?= $infoPostit['id_post_it'] ?>" class="btn-page-visualisation delete-button"><i class="fas fa-trash-alt"></i></a>
+        
+                <?php   
+                }
+                ?>
             </div>
+
+
 
         </div>
 
@@ -118,12 +123,12 @@ if (isset($couleursHex[$couleur])) {
         
         if($infoPostit['date_modification'] != $infoPostit['date_creation']){ ?>
             
-            <p class="dates">Modifié le : <?= date('d/m/Y à H:i', strtotime($infoPostit['date_modification'])) ?></p>
+            <p class="dates" style="color: white;">Modifié le : <?= date('d/m/Y à H:i', strtotime($infoPostit['date_modification'])) ?></p><br>
         <?php 
          }           
         ?>
 
-        <p class="dates">Créé le : <?= date('d/m/Y à H:i', strtotime($infoPostit['date_creation'])) ?> par <?= $infoPostit['prenom'] ?> <?= $infoPostit['nom'] ?></p>
+        <p style="color: white;" class="dates">Créé le : <?= date('d/m/Y à H:i', strtotime($infoPostit['date_creation'])) ?> par <?= $infoPostit['prenom'] ?> <?= $infoPostit['nom'] ?></p>
         <a href="../index.php" class="btn-page-visualisation">Retour</a>
     </main>
        

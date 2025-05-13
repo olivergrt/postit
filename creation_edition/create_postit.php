@@ -247,6 +247,9 @@ else {
               <input type="hidden" name="selected_users" id="selected-users-input">
               <button class="btn-connexion w-100 mt-4" name="save">Enregistrer</button>
             </form>
+              <a href="../index.php">
+                <button class="btn-cancel w-100 mt-4">Annuler</button>
+              </a>
 
             <?php if (isset($erreur)): ?>
               <div class="alert alert-danger mt-3 text-center"><?= $erreur ?></div>
@@ -256,7 +259,7 @@ else {
       </div>
     </div>
     <br>
-    <center> <a href="../index.php" class="btn-retour">Retour</a></center>
+   
     <script src="search_user.js"></script>
     <script src="create_postit.js"></script>
 </body>

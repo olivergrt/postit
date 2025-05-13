@@ -1,5 +1,7 @@
 body {
-  background-color: #FFF3D6;
+/*  background-color: #0D1B2A;*/
+ background: linear-gradient(90deg, #24344D 0%, #152C45 100%);
+
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -52,16 +54,18 @@ label {
 }
 
 
-.btn-retour {
-    display: inline-block;
-    padding: 12px 20px;
-    margin: 10px 5px;
-    text-decoration: none;
-    color: white;
-    background-color: #007bff;
-    border-radius: 5px;
-    font-size: 16px;
+.btn-cancel {
+  background-color: #F0F0F0;
+  color: grey;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
-.btn-retour:hover {
-    background-color: #0056b3;
+
+
+.btn-cancel:hover {
+  background-color: #444444;
+  color: white;
 }

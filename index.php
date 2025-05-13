@@ -72,16 +72,16 @@ $couleursHex = [
           </a>
         </div>
         <div class="navbar-right">
-          <a href="index.php"            title="Accueil"><i class="fas fa-home"></i></a>
-          <a href="index.php?account=true" title="Mon compte"><i class="fas fa-user"></i></a>
-          <a href="connexion/deconnexion.php" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></a>
+          <a href="index.php"            title="Accueil"><i class="fas fa-home icon-navbar"></i></a>
+          <a href="index.php?account=true" title="Mon compte"><i class="fas fa-user icon-navbar"></i></a>
+          <a href="connexion/deconnexion.php" title="Déconnexion"><i class="fas fa-sign-out-alt icon-navbar"></i></a>
         </div>
       </div>
     </div>
 
 
 
-    <h4 style="margin : 20px">Bonjour, <?= htmlspecialchars($infoUtilisateur['prenom']); ?></h4>
+    <h4 style="margin : 20px; color: white">Bonjour, <?= htmlspecialchars($infoUtilisateur['prenom']); ?></h4>
 
     <?php if (!isset($_GET['account'])){ ?>
 
@@ -90,7 +90,7 @@ $couleursHex = [
         <!-- Affichage de Mes post-its -->
 
         <div class="postit-container">
-            <h2>Mes post-it</h2>
+            <h2 style="color: white">Mes post-it</h2>
             <a href="creation_edition/create_postit.php" class="btn-create">Créer un post-it</a>
 
             <?php 
@@ -105,11 +105,12 @@ $couleursHex = [
                     $backgroundColor = '#FFF176'; // Jaune par défaut
                 }
                 ?>
-                <div class="postit-list" style="background-color: <?= $backgroundColor ?>;">
-                    <p><a href="visualisation_postit/visualisation_postit.php?id=<?= $postit['id_post_it'] ?>">
+                <div class="postit-list <?= htmlspecialchars($couleur) ?>">
+
+                    <a href="visualisation_postit/visualisation_postit.php?id=<?= $postit['id_post_it'] ?>">
                         <?= htmlspecialchars($postit['titre']) ?></a>
-                    </p>
-                    <p>
+                    
+                        <br>
                         <?php 
                         if($postit['date_modification'] == $postit['date_creation']){
                         ?>
@@ -123,7 +124,7 @@ $couleursHex = [
                         } 
                         ?>       
                         <?= date('d/m/Y à H:i' , strtotime($postit['date_modification'])) ?>
-                    </p>
+                    
                     
                     <div class="button-wrapper">
                       <a href="creation_edition/create_postit.php?id=<?= $postit['id_post_it'] ?>" class="btn-page-visualisation">
@@ -157,7 +158,9 @@ $couleursHex = [
                     $backgroundColor = '#FFF176'; // Jaune par défaut
                 }
             ?>
-                <div class="postit-list" style="background-color: <?= $backgroundColor ?>;">
+                <div class="postit-list <?= htmlspecialchars($couleur) ?>">
+
+
                     <p> 
                         <i class="fas fa-share-alt" title="Post-it partagé"></i>
                         <a href="visualisation_postit/visualisation_postit.php?id=<?= $postit['id_post_it'] ?>">

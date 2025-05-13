@@ -63,6 +63,13 @@ if (isset($_POST['submit'])) {
                     <div class="container text-center text-danger" id="client-error">
                         <?php if (!empty($error)) echo "<p>$error</p>"; ?> <!-- Affichage des erreurs -->
                     </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                      <label class="form-check-label" for="remember">
+                        Se souvenir de moi
+                      </label>
+                    </div>
+                    
                     <br>
                     <div class="d-flex justify-content-between mt-3">
                         <button class="btn btn-connexion" name="submit">Se connecter</button>
