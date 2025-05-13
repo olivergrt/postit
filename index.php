@@ -94,7 +94,7 @@ $couleursHex = [
             <a href="creation_edition/create_postit.php" class="btn-create">Créer un post-it</a>
 
             <?php 
-            if(empty($infoPostitPerso)){ echo "<center>Oups, aucun post-it pour l’instant !</center>";}
+            if(empty($infoPostitPerso)){ echo "<center style='color: white'>Oups, aucun post-it pour l’instant !</center>";}
             foreach ($infoPostitPerso as $postit) { 
 
                 $couleur = $postit['couleur'];
@@ -143,10 +143,10 @@ $couleursHex = [
         <!-- Affichage des Post-its partagés -->
 
         <div class="postit-container">
-            <h2 style="margin-bottom: 65px;">Post-it partagés</h2>
+            <h2 style="margin-bottom: 65px;color: white;">Post-it partagés</h2>
 
             <?php 
-            if(empty($infoPostitPartage)){ echo "<center>Vous n’avez reçu aucun post-it partagé par d’autres utilisateurs.<center>";}
+            if(empty($infoPostitPartage)){ echo "<center style='color: white'>Vous n’avez reçu aucun post-it partagé par d’autres utilisateurs.<center>";}
 
             foreach ($infoPostitPartage as $postit) { 
 
