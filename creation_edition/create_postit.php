@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); 
 require_once('../config.php');
 require_once("../functions.php");
 
@@ -61,7 +61,7 @@ if (isset($_POST['save'])) {
     }
 
     if (strlen($contenu) > 600) { 
-        $erreurs[] = "Le contenu doit comporter au maximum 250 caractères.";
+        $erreurs[] = "Le contenu doit comporter au maximum 600 caractères.";
     }
 
     if (empty($erreurs)) {

@@ -9,26 +9,29 @@ $error = ""; // Variable pour stocker les erreurs
 
 if (isset($_POST['submit'])) {
     if (!empty($_POST['email']) && !empty($_POST['password'])) {
-        
+
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-        $pwd = sha1($_POST['password']);
+        $pwd = $_POST['password'];
 
-        $reqVerif = $bdd->prepare("SELECT id_utilisateur FROM utilisateur WHERE password = ? AND email = ?");
-        $reqVerif->execute([$pwd, $email]);
+        // Récupérer le mot de passe hashé depuis la base pour l'email donné
+        $reqVerif = $bdd->prepare("SELECT id_utilisateur, password FROM utilisateur WHERE email = ?");
+        $reqVerif->execute([$email]);
 
-        $info = $reqVerif->fetch(PDO::FETCH_ASSOC); 
+        $info = $reqVerif->fetch(PDO::FETCH_ASSOC);
 
-        if ($info) { 
-            $_SESSION['idUser'] = $info['id_utilisateur']; 
+        if ($info && password_verify($pwd, $info['password'])) {
+            $_SESSION['idUser'] = $info['id_utilisateur'];
             header("Location: ../index.php");
             exit();
         } else {
             $error = "Identifiant ou mot de passe incorrect.";
         }
+
     } else {
         $error = "Veuillez remplir tous les champs.";
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -52,12 +55,12 @@ if (isset($_POST['submit'])) {
                 <form method="POST" action="">
                     <div class="form-group">
                         <label>Saisir votre adresse mail :</label>
-                        <input id="email" class="form-control" type="email" value="oliver@test.fr" name="email">
+                        <input id="email" class="form-control" type="email" value="" name="email">
                     </div>
                     <br>
                     <div class="form-group">
                         <label>Saisir votre mot de passe :</label>
-                        <input id="password" class="form-control" type="password" value="azertyuiop" name="password">
+                        <input id="password" class="form-control" type="password" value="" name="password">
                         <small class="form-text text-muted"><a href="mailto:oliver.grant@universite-paris-saclay.fr">Mot de passe oublié.</a></small>
                     </div>
                     <div class="container text-center text-danger" id="client-error">

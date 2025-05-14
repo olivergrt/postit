@@ -37,19 +37,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($values['pseudo']==='') {
         $errors['pseudo'] = "Pseudo requis.";
     } else {
+        
         // Vérifie unicité du pseudo
         $stmt = $bdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE pseudo = ?");
         $stmt->execute([$values['pseudo']]);
+        
         if ($stmt->fetchColumn() > 0) {
             $errors['pseudo'] = "Pseudo déjà utilisé.";
         }
     }
     if ($values['email']==='') {
         $errors['email'] = "Email requis.";
-    } elseif (!filter_var($values['email'], FILTER_VALIDATE_EMAIL)) {
+    } 
+    elseif (!filter_var($values['email'], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Email invalide.";
-    } else {
-        // Vérifie unicité de l'email
+    } 
+    else {
+        // Vérifie si l'email a jamais ete utilisé
         $stmt = $bdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE email = ?");
         $stmt->execute([$values['email']]);
         if ($stmt->fetchColumn() > 0) {
@@ -59,9 +63,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Date de naissance
     if ($values['jour']==='' || $values['mois']==='' || $values['annee']==='') {
         $errors['datenaiss'] = "Date de naissance requise.";
-    } elseif (!checkdate((int)$values['mois'], (int)$values['jour'], (int)$values['annee'])) {
+    } 
+    elseif (!checkdate((int)$values['mois'], (int)$values['jour'], (int)$values['annee'])) {
         $errors['datenaiss'] = "Date invalide.";
-    } else {
+    } 
+    else {
         // Stocke au format SQL
         $values['datenaiss'] = sprintf(
             '%04d-%02d-%02d',
@@ -84,10 +90,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // 3) Si tout est bon, on insère et redirige
     if (empty($errors)) {
-        $pwdHash = sha1($values['password']);
+        // Utilisation d'Argon2id (recommandé)
+        $pwdHash = password_hash($values['password'], PASSWORD_ARGON2ID);
+
         $stmt = $bdd->prepare(
-            'INSERT INTO utilisateur (email, password, nom, prenom, pseudo, date_naiss) VALUES (?, ?, ?, ?, ?, ?)');
-        $stmt->execute([$values['email'],$pwdHash,$values['nom'],$values['prenom'],$values['pseudo'],$values['datenaiss']]);
+            'INSERT INTO utilisateur (email, password, nom, prenom, pseudo, date_naiss) VALUES (?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([
+            $values['email'],
+            $pwdHash,
+            $values['nom'],
+            $values['prenom'],
+            $values['pseudo'],
+            $values['datenaiss']
+        ]);
+
         header("Location: ../connexion/connexion.php");
         exit();
     }
@@ -150,10 +167,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </select>
         <select name="jour" class="form-select <?php if(isset($errors['datenaiss'])) echo 'is-invalid'; ?>">
           <option value="">Jour</option>
+          
           <?php for($d=1;$d<=31;$d++){
             $sel=(isset($values['jour'])&&$values['jour']==$d)?'selected':''; 
             echo "<option $sel>$d</option>";
           } ?>
+
         </select>
       </div>
       <?php showError('datenaiss'); ?>
