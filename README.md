@@ -10,13 +10,16 @@ Post-it est une application web permettant de créer, gérer, partager et affich
 
 Les fichiers sont organisés par dossier fonctionnel :
 
-connexion/ -> Fichiers PHP, CSS et JS pour la page de connexion
-inscription/ -> Fichiers PHP, CSS et JS pour l'inscription
-Creation_edition/ -> Création/édition des post-its + API d'autocomplétion
-img/ -> Contient les images du projet
-sql/ -> Script SQL pour initialiser la base de données
-includes/ -> Header, footer, fonctions communes
+Dossier connexion/ -> Fichiers PHP, CSS et JS pour la page de connexion
+Dossier inscription/ -> Fichiers PHP, CSS et JS pour l'inscription
+Dossier Creation_edition/ -> Fichier PHP, CSS et JS pour la Création/édition des post-its + API d'autocomplétion
+Dossier img/ -> Contient les images du projet
+Fichier .sql/ -> Script SQL pour initialiser la base de données
+fonctions.php -> fonctions PHP
 index.php -> Page d'accueil
+config.php -> Connexion à la base de données
+styles.css -> Fichier CSS pour le style de la page index
+
 
 
 ---
