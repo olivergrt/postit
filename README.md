@@ -143,6 +143,7 @@ Chaque suggestion affiche les informations suivantes : nom, prénom, e-mail et p
 - Accès au profil utilisateur pour modifier pseudo, email, prénom, nom, date de naissance
 - Possibilité de modifier ou supprimer son mot de passe
 - Fonction "Se souvenir de moi" pour une reconnexion automatique
+- Page conditions d'utilisation 
 
 
 ---
