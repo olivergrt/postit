@@ -3,6 +3,7 @@ session_start();
 include("../config.php");
 require_once("../functions.php");
 
+autoLoginFromCookie();
 verifAlreadyConnected(); 
 
 $error = ""; // Variable pour stocker les erreurs
@@ -20,7 +21,27 @@ if (isset($_POST['submit'])) {
         $info = $reqVerif->fetch(PDO::FETCH_ASSOC);
 
         if ($info && password_verify($pwd, $info['password'])) {
+            
             $_SESSION['idUser'] = $info['id_utilisateur'];
+            
+            /*Creation d'un cookie pour conserver la connexion*/
+            if (isset($_POST['remember'])) {
+                $token = bin2hex(random_bytes(32));
+                $expire = date('Y-m-d H:i:s', time() + 60 * 60 * 24 * 30);
+
+                $ip = $_SERVER['REMOTE_ADDR'];
+                $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+                $updateToken = $bdd->prepare("
+                    UPDATE utilisateur 
+                    SET remember_token = ?, token_expire = ?, remember_ip = ?, remember_user_agent = ? 
+                    WHERE id_utilisateur = ?
+                ");
+                $updateToken->execute([$token, $expire, $ip, $userAgent, $info['id_utilisateur']]);
+
+                setcookie("remember_token", $token, time() + 60 * 60 * 24 * 30, "/", "", false, true);
+            }
+
             header("Location: ../index.php");
             exit();
         } else {
@@ -55,17 +76,27 @@ if (isset($_POST['submit'])) {
                 <form method="POST" action="">
                     <div class="form-group">
                         <label>Saisir votre adresse mail :</label>
-                        <input id="email" class="form-control" type="email" value="" name="email">
+                        <input id="email" class="form-control" type="email" name="email" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
+                        <div class="text-danger" id="error-email">
+                            <?php if (!empty($_POST) && empty($_POST['email'])) echo "L'adresse email est requise."; ?>
+                        </div>
                     </div>
                     <br>
                     <div class="form-group">
                         <label>Saisir votre mot de passe :</label>
-                        <input id="password" class="form-control" type="password" value="" name="password">
+                        <input id="password" class="form-control" type="password" name="password">
+                        <div class="text-danger" id="error-password">
+                            <?php if (!empty($_POST) && empty($_POST['password'])) echo "Le mot de passe est requis."; ?>
+                        </div>
                         <small class="form-text text-muted"><a href="mailto:oliver.grant@universite-paris-saclay.fr">Mot de passe oublié.</a></small>
                     </div>
-                    <div class="container text-center text-danger" id="client-error">
-                        <?php if (!empty($error)) echo "<p>$error</p>"; ?> <!-- Affichage des erreurs -->
+
+                    <div class="text-danger text-center" id="error-global">
+                        <?php if (!empty($error)) echo $error; ?>
                     </div>
+
+
+
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" name="remember" id="remember">
                       <label class="form-check-label" for="remember">

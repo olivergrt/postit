@@ -1,6 +1,7 @@
 <?php 
 session_start(); 
 require_once("functions.php");
+autoLoginFromCookie();
 
 if (!isset($_SESSION['idUser'])) {
     header("Location: connexion/connexion.php");

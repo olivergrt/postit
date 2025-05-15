@@ -22,8 +22,7 @@ if (isset($_GET['term'])) {
 }
 
 // Suppression de l'id de l'utilisateur connecté pour ne pas le suggérer en partage 
-$reqSelectUser = "
-SELECT id_utilisateur, email, pseudo, prenom, nom FROM utilisateur WHERE id_utilisateur != :idUtilisateur AND (pseudo LIKE :term OR prenom LIKE :term OR nom LIKE :term)"; 
+$reqSelectUser = "SELECT id_utilisateur, email, pseudo, prenom, nom FROM utilisateur WHERE id_utilisateur != :idUtilisateur AND (pseudo LIKE :term OR prenom LIKE :term OR nom LIKE :term) LIMIT 5"; 
 
 $selectUsers = $bdd->prepare($reqSelectUser);
 $selectUsers->execute(['idUtilisateur' => $idUtilisateur,'term' => "%$term%"]);

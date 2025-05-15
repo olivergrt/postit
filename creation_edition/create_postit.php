@@ -239,9 +239,9 @@ else {
                       <a href="create_postit.php?id=<?= $idPostit ?>&deleteSharedUser=<?= $user['id_utilisateur']?>">Supprimer</a>
                     </p>
                   
-                  <?php } ?>
-                
-                <?php } ?>
+                  <?php } 
+                   } ?>
+
               </div>
 
               <input type="hidden" name="selected_users" id="selected-users-input">
@@ -251,9 +251,10 @@ else {
                 <button class="btn-cancel w-100 mt-4">Annuler</button>
               </a>
 
-            <?php if (isset($erreur)): ?>
+            <?php if (isset($erreur)){ ?>
               <div class="alert alert-danger mt-3 text-center"><?= $erreur ?></div>
-            <?php endif; ?>
+            <?php } ?>            
+
           </div>
         </div>
       </div>

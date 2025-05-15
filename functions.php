@@ -104,7 +104,7 @@ function deletePostit($idPostit, $id_proprio) {
         $deletePartages = $bdd->prepare('DELETE FROM `post_it_partage` WHERE id_post_it = ?');
         $deletePartages->execute([$idPostit]);
 
-        // Supprimer le post-it lui-même
+        // Supprimer le post-it de soi meme 
         $deletePostit = $bdd->prepare('DELETE FROM `post_it` WHERE id_post_it = ? AND id_proprietaire = ?'); 
         $deletePostit->execute([$idPostit, $id_proprio]);
 
@@ -141,5 +141,38 @@ function supprimerCompteUtilisateur($idUtilisateur) {
     $bdd->prepare("DELETE FROM utilisateur WHERE id_utilisateur = ?")->execute([$idUtilisateur]);
     
 }
+
+/* Connexion auto Cookie remember me */
+
+function autoLoginFromCookie() {
+    $bdd = ConnexionDB();
+    if (!isset($_SESSION['idUser']) && isset($_COOKIE['remember_token'])) {
+        $token = $_COOKIE['remember_token'];
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+        $stmt = $bdd->prepare("SELECT id_utilisateur, token_expire, remember_ip, remember_user_agent FROM utilisateur WHERE remember_token = ?");
+        $stmt->execute([$token]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            
+            $tokenValid = strtotime($user['token_expire']) > time();
+            $ipMatch = $user['remember_ip'] === $ip;
+            $agentMatch = $user['remember_user_agent'] === $userAgent;
+
+            if ($tokenValid && $ipMatch && $agentMatch) {
+                
+                $_SESSION['idUser'] = $user['id_utilisateur'];
+                return;
+            }
+        }
+
+        // Échec : suppression du cookie
+        setcookie('remember_token', '', time() - 3600, "/");
+    }
+}
+
+
 
 ?>

@@ -112,11 +112,7 @@ if (isset($couleursHex[$couleur])) {
                 }
                 ?>
             </div>
-
-
-
         </div>
-
         <br>
 
         <?php 
