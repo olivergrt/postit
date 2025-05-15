@@ -1,0 +1,18 @@
+Instructions pour l'installation de la base de données
+Pour installer la base de données de l'application Post-it, veuillez suivre les étapes suivantes :
+
+- Accédez à phpMyAdmin via votre navigateur.
+
+- Créez une nouvelle base de données nommée app_post_it (en UTF-8).
+
+- Cliquez sur l’onglet "Importer".
+
+- Sélectionnez le fichier app_post_it.sql fourni.
+
+Lancez l’importation.
+
+Ce fichier contient :
+
+La structure complète des tables nécessaires à l’application.
+
+Des données de base, incluant des exemples d'utilisateurs.
