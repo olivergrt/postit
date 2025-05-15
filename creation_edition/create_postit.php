@@ -174,7 +174,7 @@ else {
 
               <div class="form-group mb-3">
                 <label>Contenu :</label>
-                <textarea class="form-control" id="content" name="content" maxlength="600" rows="4" placeholder="Max 200 caractères"><?= $idPostit ? htmlspecialchars($SelectInfoPostit['contenu']) : '' ?></textarea>
+                <textarea class="form-control" id="content" name="content" maxlength="600" rows="4" placeholder="Max 600 caractères"><?= $idPostit ? htmlspecialchars($SelectInfoPostit['contenu']) : '' ?></textarea>
               </div>
               
               <label for="couleur">Couleur du post-it :</label>
@@ -259,7 +259,6 @@ else {
       </div>
     </div>
     <br>
-   
     <script src="search_user.js"></script>
     <script src="create_postit.js"></script>
 </body>
